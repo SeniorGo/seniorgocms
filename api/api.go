@@ -12,10 +12,14 @@ func NewApi(version, staticsDir string) http.Handler {
 
 	b := box.NewBox()
 
-	b.HandleResourceNotFound = HandleNotFound
+	b.WithInterceptors(PrettyError)
 
+	b.HandleResourceNotFound = HandleNotFound
+	b.HandleMethodNotAllowed = HandleMethodNotAllowed
+
+	b.Handle("GET", "/bad", HandleBad)
 	b.Handle("POST", "/hello", HandleHello)
-	b.HandleFunc("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
+	b.Handle("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(version))
 	})
 
