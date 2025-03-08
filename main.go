@@ -27,43 +27,41 @@ func main() {
 
 	fmt.Println("config:", c)
 
+	m := http.NewServeMux()
+
+	m.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`
+			<h1>Hello World!!</h1>
+			<p>Página de inicio</p>
+			<a href="/login">Login</a>
+		`))
+	})
+
+	m.HandleFunc("GET /login", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(`
+			<h1>Entra al CMS!!</h1>
+			<p>Página de login</p>
+			Usuario: <input type="text" name="username" /><br>
+			Contraseña: <input type="text" name="password" /><br>
+			<button>Entrar</button>
+		`))
+	})
+
 	s := http.Server{
-		Addr: c.Addr,
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			log.Println(r.Method, r.URL.String())
-
-			if r.URL.Path == "/" {
-				w.Write([]byte(`
-				<h1>Hello World!!</h1>
-				<p>Página de inicio</p>
-				<a href="/login">Login</a>
-				`))
-				return
-			}
-
-			if r.URL.Path == "/login" {
-				w.Write([]byte(`
-				<h1>Entra al CMS!!</h1>
-				<p>Página de login</p>
-				Usuario: <input type="text" name="username" /><br>
-				Contraseña: <input type="text" name="password" /><br>		
-				<button>Entrar</button>
-				`))
-				return
-			}
-
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(`
-				<h1>NOT FOUND!!</h1>
-				`))
-			return
-
-		}),
+		Addr:    c.Addr,
+		Handler: MiddlewareAccessLog(m.ServeHTTP),
 	}
 
 	log.Println("Listening on", s.Addr)
 	err = s.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func MiddlewareAccessLog(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.Method, r.URL.String())
+		next.ServeHTTP(w, r)
 	}
 }
