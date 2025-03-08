@@ -1,7 +1,9 @@
 
 VERSION = $(shell git describe --tags --always)
+DESCRIPTION = $(shell git log -1 --pretty=%s)
 FLAGS = -ldflags "\
   -X main.VERSION=$(VERSION) \
+  -X 'main.DESCRIPTION=$(DESCRIPTION)' \
 "
 
 .PHONY: run
