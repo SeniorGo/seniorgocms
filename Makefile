@@ -1,12 +1,16 @@
 
+VERSION = $(shell git describe --tags --always)
+FLAGS = -ldflags "\
+  -X main.VERSION=$(VERSION) \
+"
 
 .PHONY: run
 run:
-	go run main.go
+	go run $(FLAGS) main.go
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 go build -o bin/seniorgocms main.go
+	CGO_ENABLED=0 go build $(FLAGS) -o bin/seniorgocms main.go
 
 .PHONY: clean
 clean:
@@ -22,3 +26,6 @@ deps:
 test:
 	go test -cover ./...
 
+.PHONY: version
+version:
+	@echo $(VERSION)
