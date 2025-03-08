@@ -10,7 +10,7 @@ import (
 
 func TestNewApi(t *testing.T) {
 
-	h := NewApi("testversion")
+	h := NewApi("testversion", "")
 	a := apitest.NewWithHandler(h)
 
 	t.Run("Request /version", func(t *testing.T) {

@@ -17,6 +17,7 @@ var DESCRIPTION = "new feature"
 type Config struct {
 	Addr        string                `json:"addr"`
 	ServiceName string                `json:"service_name"`
+	StaticsDir  string                `json:"statics_dir"`
 	Discord     discord.DiscordConfig `json:"discord"`
 }
 
@@ -44,7 +45,7 @@ func main() {
 	}
 
 	// Instanciamos API y server
-	m := api.NewApi(VERSION)
+	m := api.NewApi(VERSION, c.StaticsDir)
 	s := http.Server{
 		Addr:    c.Addr,
 		Handler: api.MiddlewareAccessLog(m.ServeHTTP),
