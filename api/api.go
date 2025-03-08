@@ -10,9 +10,11 @@ func NewApi(version string) http.Handler {
 
 	b := box.NewBox()
 
+	b.HandleResourceNotFound = HandleNotFound
+
 	b.HandleFunc("GET", "/", HandleHome)
 	b.HandleFunc("GET", "/login", HandleLogin)
-	b.HandleFunc("POST", "/hello", HandleHello)
+	b.Handle("POST", "/hello", HandleHello)
 	b.HandleFunc("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(version))
 	})

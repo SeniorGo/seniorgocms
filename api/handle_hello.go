@@ -1,26 +1,19 @@
 package api
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 	"strings"
 )
 
-func HandleHello(w http.ResponseWriter, r *http.Request) {
+type HelloRequest struct {
+	Name string `json:"name"`
+}
 
-	payload := struct {
-		Name string `json:"name"`
-	}{}
+type HelloResponse struct {
+	Message string `json:"message"`
+}
 
-	// Read payload
-	err := json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("El JSON que me has enviado no es válido"))
-		return
-	}
+func HandleHello(payload *HelloRequest, w http.ResponseWriter) any {
 
 	// Sanitize
 	payload.Name = strings.TrimSpace(payload.Name)
@@ -29,11 +22,11 @@ func HandleHello(w http.ResponseWriter, r *http.Request) {
 	if payload.Name == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("El campo 'name' es obligatorio y no puede estar vacío"))
-		return
+		return nil
 	}
 
 	// Send response
-	json.NewEncoder(w).Encode(map[string]string{
-		"message": "Hello " + payload.Name + "!",
-	})
+	return HelloResponse{
+		Message: "Hello " + payload.Name + "!",
+	}
 }
