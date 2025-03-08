@@ -23,6 +23,9 @@ func NewApi(version, staticsDir string) http.Handler {
 		w.Write([]byte(version))
 	})
 
+	// openapi
+	buildOpenApi(b)
+
 	// Mount statics
 	b.Handle("GET", "/*", statics.ServeStatics(staticsDir)).WithName("serveStatics")
 

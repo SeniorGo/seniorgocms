@@ -13,21 +13,21 @@ type HelloResponse struct {
 	Message string `json:"message"`
 }
 
-func HandleHello(payload *HelloRequest) any {
+func HandleHello(payload *HelloRequest) (*HelloResponse, error) {
 
 	// Sanitize
 	payload.Name = strings.TrimSpace(payload.Name)
 
 	// Validate
 	if payload.Name == "" {
-		return HttpError{
+		return nil, HttpError{
 			Status:      http.StatusBadRequest,
 			Description: "El campo 'name' es obligatorio y no puede estar vacío",
 		}
 	}
 
 	// Send response
-	return HelloResponse{
+	return &HelloResponse{
 		Message: "Hello " + payload.Name + "!",
-	}
+	}, nil
 }

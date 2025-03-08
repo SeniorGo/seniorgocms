@@ -7,3 +7,4 @@ github.com/fulldump/biff
 # github.com/fulldump/box v0.5.1
 ## explicit; go 1.19
 github.com/fulldump/box
+github.com/fulldump/box/boxopenapi
