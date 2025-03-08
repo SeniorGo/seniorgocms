@@ -35,3 +35,10 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](./LICENS
 ## Contacto
 
 Entra en la [comunidad de discord](https://discord.com/channels/1235789126033477632/1242312465052602438). 
+
+## Cómo contribuir
+
+En la comunidad de discord pide acceso para:
+* Escribir en los repositorios de github.com/SeniorGo
+* Leer los logs de inceptiondb.io
+
