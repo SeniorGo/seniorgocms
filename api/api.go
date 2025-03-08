@@ -2,18 +2,20 @@ package api
 
 import (
 	"net/http"
+
+	"github.com/fulldump/box"
 )
 
 func NewApi(version string) http.Handler {
 
-	m := http.NewServeMux()
+	b := box.NewBox()
 
-	m.HandleFunc("GET /", HandleHome)
-	m.HandleFunc("GET /login", HandleLogin)
-	m.HandleFunc("POST /hello", HandleHello)
-	m.HandleFunc("GET /version", func(w http.ResponseWriter, r *http.Request) {
+	b.HandleFunc("GET", "/", HandleHome)
+	b.HandleFunc("GET", "/login", HandleLogin)
+	b.HandleFunc("POST", "/hello", HandleHello)
+	b.HandleFunc("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(version))
 	})
 
-	return m
+	return b
 }

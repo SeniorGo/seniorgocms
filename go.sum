@@ -2,3 +2,5 @@ github.com/fulldump/apitest v1.3.0 h1:BG2Z2iCh5u5m/mpzAnaTDxMno8Iv4jkLoDtI08gFx+
 github.com/fulldump/apitest v1.3.0/go.mod h1:UZ/2tr5LhMNXZLgEG9tdz+ekUN8JtBHEn84d8zOm5p4=
 github.com/fulldump/biff v1.3.0 h1:FZDqvP8lkrCMDv/oNEH+j2unpuAY+8aXZ44GIvXYOx4=
 github.com/fulldump/biff v1.3.0/go.mod h1:TnBce9eRITmnv3otdmITKeU/zmC08DxotA9s0VcJELg=
+github.com/fulldump/box v0.5.1 h1:TX3+Sh9Y/sGg8ynAExZF/aGApDyrd01BOgU3mLz82m0=
+github.com/fulldump/box v0.5.1/go.mod h1:k1dcwIeNOar6zLlP9D8oF/4FjQeK8kAt7BtRUh/SrMg=
