@@ -1,0 +1,6 @@
+# github.com/fulldump/apitest v1.3.0
+## explicit; go 1.17
+github.com/fulldump/apitest
+# github.com/fulldump/biff v1.3.0
+## explicit; go 1.14
+github.com/fulldump/biff
