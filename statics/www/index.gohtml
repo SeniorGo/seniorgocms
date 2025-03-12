@@ -17,3 +17,13 @@
 {{ else }}
     <p>No hay posts aún.</p>
 {{ end }}
+
+
+<div id="version" style="position: absolute; left: 0; bottom: 0;"></div>
+<script>
+    fetch('/version')
+        .then(req => req.text())
+        .then(version => {
+            document.getElementById("version").innerText = version;
+        });
+</script>

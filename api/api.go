@@ -3,23 +3,12 @@ package api
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/fulldump/box"
 
 	"github.com/SeniorGo/seniorgocms/persistence"
 	"github.com/SeniorGo/seniorgocms/statics"
 )
-
-type Post struct {
-	Id string `json:"id"`
-
-	Title string `json:"title"`
-	Body  string `json:"body"`
-
-	CreationTime     time.Time `json:"creation_time"`
-	ModificationTime time.Time `json:"modification_time"`
-}
 
 func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.Handler {
 

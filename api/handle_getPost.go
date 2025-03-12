@@ -14,10 +14,7 @@ func HandleGetPost(ctx context.Context, r *http.Request) (*Post, error) {
 	post, err := p.Get(ctx, postId)
 	if err != nil {
 		log.Println("p.Get:", err)
-		return nil, HttpError{
-			Status:      http.StatusInternalServerError,
-			Description: "Problem reading from persistence layer",
-		}
+		return nil, ErrorPersistenceRead
 	}
 
 	return &post.Item, nil

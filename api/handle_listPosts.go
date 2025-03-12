@@ -15,10 +15,7 @@ func HandleListPosts(w http.ResponseWriter, r *http.Request) ([]Post, error) {
 	posts, err := p.List(ctx)
 	if err != nil {
 		log.Println("p.List:", err)
-		return nil, HttpError{
-			Status:      http.StatusInternalServerError,
-			Description: "Problem reading from persistence layer",
-		}
+		return nil, ErrorPersistenceRead
 	}
 
 	result := make([]Post, len(posts))

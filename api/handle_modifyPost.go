@@ -20,10 +20,7 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 	post, err := p.Get(ctx, postId)
 	if err != nil {
 		log.Println("p.Get:", err)
-		return nil, HttpError{
-			Status:      http.StatusInternalServerError,
-			Description: "Problem reading from persistence layer",
-		}
+		return nil, ErrorPersistenceRead
 	}
 
 	post.Item.ModificationTime = time.Now()
@@ -36,13 +33,15 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 		post.Item.Body = *input.Body
 	}
 
+	err = post.Item.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	err = p.Put(ctx, post)
 	if err != nil {
 		log.Println("p.Put:", err)
-		return nil, HttpError{
-			Status:      http.StatusInternalServerError,
-			Description: "Problem writing to persistence layer",
-		}
+		return nil, ErrorPersistenceWrite
 	}
 
 	return &post.Item, nil

@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"log"
 	"net/http"
 	"time"
@@ -19,16 +18,6 @@ type CreatePostRequest struct {
 
 func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
 
-	if len(input.Title) > 1024 {
-		return nil, HttpError{
-			Status:      http.StatusBadRequest,
-			Description: "title is too long",
-		}
-	}
-	if len(input.Body) > 100*1024 {
-		return nil, errors.New("body too long")
-	}
-
 	post := Post{
 		Id:           uuid.NewString(),
 		Title:        input.Title,
@@ -37,17 +26,19 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 	}
 	post.ModificationTime = post.CreationTime
 
+	err := post.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	p := GetPersistence(ctx)
-	err := p.Put(context.Background(), &persistence.ItemWithId[Post]{
+	err = p.Put(context.Background(), &persistence.ItemWithId[Post]{
 		Id:   post.Id,
 		Item: post,
 	})
 	if err != nil {
 		log.Println("p.Put:", err)
-		return nil, HttpError{
-			Status:      http.StatusInternalServerError,
-			Description: "Problem writing to persistence layer",
-		}
+		return nil, ErrorPersistenceWrite
 	}
 
 	w.WriteHeader(http.StatusCreated)
