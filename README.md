@@ -42,3 +42,6 @@ En la comunidad de discord pide acceso para:
 * Escribir en los repositorios de github.com/SeniorGo
 * Leer los logs de inceptiondb.io
 
+Haz tu primer push a master añadiéndote a la página de contributors.
+
+Si quieres ideas sobre cómo continuar consulta [NEXT.md](./NEXT.md)
