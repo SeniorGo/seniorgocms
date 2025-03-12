@@ -8,3 +8,6 @@ github.com/fulldump/biff
 ## explicit; go 1.19
 github.com/fulldump/box
 github.com/fulldump/box/boxopenapi
+# github.com/google/uuid v1.6.0
+## explicit
+github.com/google/uuid

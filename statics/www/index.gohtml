@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+{{/*This file requires recompilation to reflect changes*/}}
+
+<meta charset="UTF-8">
+
+<h1>Welcome to SeniorGo CMS</h1>
+
+<a href="/admin/">admin</a>
+
+{{ range . }}
+    <article>
+        <h2>{{ .Title }}</h2>
+        <small>{{ .CreationTime }}</small>
+        <p>{{ .Body }}</p>
+    </article>
+{{ else }}
+    <p>No hay posts aún.</p>
+{{ end }}

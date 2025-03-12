@@ -13,12 +13,12 @@ import (
 // Serve static files
 //
 //go:embed www/*
-var www embed.FS
+var Www embed.FS
 
 func FileReader(statics string) func(filename string) ([]byte, error) {
 	return func(filename string) ([]byte, error) {
 		if statics == "" {
-			return www.ReadFile(path.Join("www", filename))
+			return Www.ReadFile(path.Join("Www", filename))
 		}
 		return os.ReadFile(path.Join(statics, filename))
 	}
@@ -26,7 +26,7 @@ func FileReader(statics string) func(filename string) ([]byte, error) {
 
 func ServeStatics(statics string) http.HandlerFunc {
 	if statics == "" {
-		return AddPrefix("../www", http.FileServer(http.FS(www)))
+		return AddPrefix("../Www", http.FileServer(http.FS(Www)))
 	}
 	if strings.HasPrefix(statics, "http://") || strings.HasPrefix(statics, "https://") {
 
