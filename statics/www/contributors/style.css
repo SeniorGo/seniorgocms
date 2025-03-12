@@ -1,0 +1,13 @@
+html, body {
+  font-family: monospace;
+}
+
+body {
+  max-width: 600px;
+  margin: 100px auto;
+}
+
+section {
+  border: solid black 1px;
+  padding: 16px;
+}
