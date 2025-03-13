@@ -1,0 +1,49 @@
+.admin-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.admin-sidebar {
+  width: 220px;
+}
+
+.list-group {
+  list-style: none;
+  margin-top: 1rem;
+  padding: 0;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+.list-group-item {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.admin-content {
+  flex: 1;
+}
+
+.admin-info {
+  background-color: papayawhip;
+  color: #6c757d;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #f1e2d3;
+  border-radius: 0.25rem;
+}
+
+.monospace {
+  font-family: monospace;
+}
