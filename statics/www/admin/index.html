@@ -1,128 +1,63 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../css/reset.css" rel="stylesheet" />
+    <link href="../css/global.css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet" />
+  </head>
+  <body>
+    <h1>Admin</h1>
 
-<meta charset="UTF-8">
+    <div class="admin-container">
+      <!-- Panel lateral (sidebar) -->
+      <div class="admin-sidebar">
+        <button id="button_create" class="btn btn-primary">Crear post</button>
 
-<style>
-	#list > div {
-		cursor: pointer;
-	}
-	#list > div:hover {
-		background-color: silver;
-	}
-	#list > div.selected {
-		font-weight: bold;
-	}
-</style>
+        <ul id="list" class="list-group"></ul>
+      </div>
 
-<h1>Admin</h1>
+      <!-- Editor -->
+      <div id="editor" class="admin-content">
+        <div class="form-group">
+          <label for="editor_title">Título:</label>
+          <input
+            id="editor_title"
+            class="form-control"
+            type="text"
+            value="Nuevo post"
+          />
+        </div>
 
-<div id="list" style="float: left; width: 200px;">
-	<button id="button_create">Crear post</button>
-</div>
+        <div class="form-group">
+          <label for="editor_body">Cuerpo:</label>
+          <textarea id="editor_body" class="form-control" rows="10">
+Escribe algo asasasdfsfdsfds</textarea
+          >
+        </div>
 
-<div id="editor" style="margin-left: 220px; display: none;">
-	Título:<br>
-	<input id="editor_title" style="width: 100%;">
-	<br>
-	Cuerpo:<br>
-	<textarea id="editor_body" style="width: 100%; height: 400px;"></textarea>
-	<br>
-	<div style="color: gray; margin: 8px 0; padding: 8px; background-color: papayawhip;">
-		PostId: <span id="editor_id" style="font-family: monospace;"></span><br>
-		Created: <span id="editor_created" style="font-family: monospace;"></span><br>
-		Modified: <span id="editor_modified" style="font-family: monospace;"></span><br>
-	</div>
-	<button id="button_save">Guardar</button>
-	<button id="button_delete">Borrar</button>
-</div>
+        <div class="admin-info">
+          PostId:
+          <span id="editor_id" class="monospace"
+            >3b831773-a7ba-4f2c-bfac-35ef6145f494</span
+          ><br />
+          Created:
+          <span id="editor_created" class="monospace"
+            >2025-03-13T17:58:25.610Z</span
+          ><br />
+          Modified:
+          <span id="editor_modified" class="monospace"
+            >2025-03-13T17:58:25.610Z</span
+          >
+        </div>
 
-<script>
+        <button id="button_save" class="btn btn-success">Guardar</button>
+        <button id="button_delete" class="btn btn-danger">Borrar</button>
+      </div>
+    </div>
 
-	let list = document.getElementById('list');
-
-	let itemSelected = null;
-	function AddPost(post) {
-		let item = document.createElement('div');
-		item.addEventListener('click', function () {
-			if (itemSelected != null) {
-				itemSelected.classList.remove('selected');
-			}
-			itemSelected = item;
-			itemSelected.classList.add('selected');
-			EditPost(post);
-		}, true);
-		item.textContent = post.title;
-		list.appendChild(item);
-		return item;
-	}
-
-	let lastPost = null;
-	function EditPost(post) {
-		if (lastPost != null) {
-			// todo: save post? or warn user?
-		}
-		lastPost = post;
-		document.getElementById('editor').style.display = '';
-		document.getElementById('editor_id').innerText = post.id;
-		document.getElementById('editor_created').innerText = post.creation_time;
-		document.getElementById('editor_modified').innerText = post.modification_time;
-		document.getElementById('editor_title').value = post.title;
-		document.getElementById('editor_body').value = post.body;
-	}
-
-	function SavePost(post) {
-		fetch('/v0/posts/'+encodeURIComponent(post.id), {
-			method: 'PATCH',
-			body: JSON.stringify(post),
-		})
-						.then(resp => resp.json())
-						.then(newPost => {
-							Object.assign(lastPost, newPost);
-							EditPost(lastPost);
-						})
-	}
-
-	function DeletePost(post) {
-		fetch('/v0/posts/'+encodeURIComponent(post.id), {
-			method: 'DELETE',
-		})
-						.then(resp => {
-							document.getElementById('editor').style.display = 'none';
-							itemSelected.style.display = 'none';
-							itemSelected = null;
-						})
-	}
-
-	fetch('/v0/posts')
-					.then(resp => resp.json())
-					.then(posts => {
-							posts.forEach(AddPost)
-					})
-
-	document.getElementById('button_create').addEventListener('click', function() {
-		let post = {"title":"Nuevo post", "body":"Escribe algo asombroso"};
-		fetch('/v0/posts', {method: 'POST', body: JSON.stringify(post)})
-						.then(resp => resp.json())
-						.then(post => {
-								AddPost(post);
-								//EditPost(post);
-						})
-	}, true);
-
-	document.getElementById('button_save').addEventListener('click', function() {
-		SavePost({
-			id: lastPost.id,
-			title: document.getElementById('editor_title').value,
-			body: document.getElementById('editor_body').value,
-		})
-	}, true);
-
-	document.getElementById('button_delete').addEventListener('click', function(e) {
-		if (!confirm('¿Estás seguro de que lo quieres borrar?')) {
-			return;
-		}
-		DeletePost(lastPost);
-	}, true);
-
-
-</script>
+    <script src="js/index.js" type="module"></script>
+  </body>
+</html>
