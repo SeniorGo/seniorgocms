@@ -14,7 +14,10 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 
 	b := box.NewBox()
 
-	b.WithInterceptors(PrettyError)
+	b.WithInterceptors(
+		InterceptorAccessLog,
+		PrettyError,
+	)
 
 	b.WithInterceptors(func(next box.H) box.H {
 		return func(ctx context.Context) {

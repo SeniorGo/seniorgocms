@@ -73,7 +73,7 @@ func main() {
 	m := api.NewApi(VERSION, c.StaticsDir, p)
 	s := http.Server{
 		Addr:    c.Addr,
-		Handler: api.MiddlewareAccessLog(m.ServeHTTP),
+		Handler: m,
 	}
 
 	// Start server
