@@ -1,5 +1,9 @@
 const list = document.getElementById("list");
 
+const fakeHeaders = {
+  'X-Glue-Authentication': JSON.stringify({user: {id: 'user-fake-id'}}),
+};
+
 let itemSelected = null;
 function AddPost(post) {
   const item = document.createElement("li");
@@ -38,6 +42,7 @@ function EditPost(post) {
 function SavePost(post) {
   fetch(`/v0/posts/${encodeURIComponent(post.id)}`, {
     method: "PATCH",
+    headers: fakeHeaders,
     body: JSON.stringify(post),
   })
     .then((resp) => resp.json())
@@ -50,6 +55,7 @@ function SavePost(post) {
 function DeletePost(post) {
   fetch(`/v0/posts/${encodeURIComponent(post.id)}`, {
     method: "DELETE",
+    headers: fakeHeaders,
   }).then((resp) => {
     document.getElementById("editor").style.display = "none";
     itemSelected.style.display = "none";
@@ -57,7 +63,7 @@ function DeletePost(post) {
   });
 }
 
-fetch("/v0/posts")
+fetch("/v0/posts", {headers: fakeHeaders})
   .then((resp) => resp.json())
   .then((posts) => {
     posts.forEach(AddPost);
@@ -67,7 +73,11 @@ document.getElementById("button_create").addEventListener(
   "click",
   () => {
     const post = { title: "Nuevo post", body: "Escribe algo asombroso" };
-    fetch("/v0/posts", { method: "POST", body: JSON.stringify(post) })
+    fetch("/v0/posts", {
+        method: "POST",
+        headers: fakeHeaders,
+        body: JSON.stringify(post),
+    })
       .then((resp) => resp.json())
       .then((post) => {
         AddPost(post);

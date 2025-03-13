@@ -8,6 +8,7 @@ import (
 	"github.com/fulldump/apitest"
 	"github.com/fulldump/biff"
 
+	"github.com/SeniorGo/seniorgocms/auth"
 	"github.com/SeniorGo/seniorgocms/persistence"
 )
 
@@ -17,11 +18,15 @@ func TestNewApi(t *testing.T) {
 	p, err := persistence.NewInDisk[Post](t.TempDir())
 	biff.AssertNil(err)
 
+	authHeader := `{"user":{"id":"user-test"}}`
+
 	h := NewApi("testversion", "", p)
 	a := apitest.NewWithHandler(h)
 
 	t.Run("Request /version", func(t *testing.T) {
-		r := a.Request("GET", "/version").Do()
+		r := a.Request("GET", "/version").
+			WithHeader(auth.XGlueAuthentication, authHeader).
+			Do()
 
 		biff.AssertEqual(r.StatusCode, http.StatusOK)
 		biff.AssertEqual(r.BodyString(), "testversion")
@@ -29,6 +34,7 @@ func TestNewApi(t *testing.T) {
 
 	t.Run("Request /hello", func(t *testing.T) {
 		r := a.Request("POST", "/hello").
+			WithHeader(auth.XGlueAuthentication, authHeader).
 			WithBodyJson(map[string]string{"name": "Manu"}).
 			Do()
 
@@ -38,6 +44,7 @@ func TestNewApi(t *testing.T) {
 
 	t.Run("List posts (empty)", func(t *testing.T) {
 		r := a.Request("GET", "/v0/posts").
+			WithHeader(auth.XGlueAuthentication, authHeader).
 			Do()
 
 		biff.AssertEqual(r.StatusCode, http.StatusOK)
@@ -48,6 +55,7 @@ func TestNewApi(t *testing.T) {
 
 	t.Run("Create Post", func(t *testing.T) {
 		r := a.Request("POST", "/v0/posts").
+			WithHeader(auth.XGlueAuthentication, authHeader).
 			WithBodyJson(map[string]string{
 				"title": "My Post",
 				"body":  "This is my body",
@@ -69,6 +77,7 @@ func TestNewApi(t *testing.T) {
 
 	t.Run("List posts (1)", func(t *testing.T) {
 		r := a.Request("GET", "/v0/posts").
+			WithHeader(auth.XGlueAuthentication, authHeader).
 			Do()
 
 		biff.AssertEqual(r.StatusCode, http.StatusOK)
@@ -77,6 +86,7 @@ func TestNewApi(t *testing.T) {
 
 	t.Run("Create Post - Error title validation", func(t *testing.T) {
 		r := a.Request("POST", "/v0/posts").
+			WithHeader(auth.XGlueAuthentication, authHeader).
 			WithBodyJson(map[string]string{
 				"title": strings.Repeat("a", 1025),
 			}).

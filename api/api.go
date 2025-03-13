@@ -6,6 +6,7 @@ import (
 
 	"github.com/fulldump/box"
 
+	"github.com/SeniorGo/seniorgocms/auth"
 	"github.com/SeniorGo/seniorgocms/persistence"
 	"github.com/SeniorGo/seniorgocms/statics"
 )
@@ -36,7 +37,7 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 		w.Write([]byte(version))
 	})
 
-	v0 := b.Group("/v0")
+	v0 := b.Group("/v0").WithInterceptors(auth.Require)
 	v0.Handle("GET", "/posts", HandleListPosts)
 	v0.Handle("POST", "/posts", HandleCreatePost)
 	v0.Handle("GET", "/posts/{postId}", HandleGetPost)

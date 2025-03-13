@@ -14,6 +14,7 @@ fetch("/auth/me")
             // Logged in
             console.log(payload);
             console.log(payload.nick);
+            document.getElementById('auth_admin').style.display = '';
             document.getElementById('auth_logout').style.display = '';
             document.getElementById('auth_nick').style.display = '';
             document.getElementById('auth_nick').innerText = payload.nick;
