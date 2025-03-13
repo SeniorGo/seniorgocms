@@ -11,3 +11,6 @@
 * Añadir comentarios en cada post
 * Permitir enlazar otros posts
 * Contador de visitas/estadísticas de cada post
+* Añadir endpoint /sitemap.xml
+* Añadir el /robots.txt
+* Añadir el /humans.txt
