@@ -41,7 +41,9 @@ func PrettyError(next box.H) box.H {
 				w.Write([]byte("<h1>ERROR: " + httpErr.Title + "</h1>"))
 				w.Write([]byte("<p>ERROR: " + httpErr.Description + "</p>"))
 			} else {
-				json.NewEncoder(w).Encode(httpErr)
+				json.NewEncoder(w).Encode(map[string]any{
+					"error": httpErr,
+				})
 			}
 		}
 	}

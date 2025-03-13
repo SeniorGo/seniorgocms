@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/SeniorGo/seniorgocms/auth"
 	"github.com/SeniorGo/seniorgocms/persistence"
 )
 
@@ -20,6 +21,7 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 
 	post := Post{
 		Id:           uuid.NewString(),
+		Author:       auth.GetAuth(ctx).User,
 		Title:        input.Title,
 		Body:         input.Body,
 		CreationTime: time.Now(),

@@ -14,3 +14,5 @@
 * Añadir endpoint /sitemap.xml
 * Añadir el /robots.txt
 * Añadir el /humans.txt
+* Usar openapi para generar el /openapi.json
+

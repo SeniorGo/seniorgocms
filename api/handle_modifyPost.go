@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/SeniorGo/seniorgocms/auth"
 )
 
 type ModifyPostRequest struct {
@@ -26,6 +28,12 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 		return nil, ErrorPostNotFound
 	}
 
+	// Access control
+	if post.Item.Author.ID != auth.GetAuth(ctx).User.ID {
+		return nil, ErrorPostForbidden
+	}
+
+	post.Item.Author = auth.GetAuth(ctx).User // Update user data
 	post.Item.ModificationTime = time.Now()
 
 	if input.Title != nil {

@@ -3,10 +3,14 @@ package api
 import (
 	"net/http"
 	"time"
+
+	"github.com/SeniorGo/seniorgocms/auth"
 )
 
 type Post struct {
 	Id string `json:"id"`
+
+	Author auth.User `json:"author"`
 
 	Title string `json:"title"`
 	Body  string `json:"body"`

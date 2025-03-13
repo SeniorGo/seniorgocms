@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 	"testing"
@@ -18,7 +19,15 @@ func TestNewApi(t *testing.T) {
 	p, err := persistence.NewInDisk[Post](t.TempDir())
 	biff.AssertNil(err)
 
-	authHeader := `{"user":{"id":"user-test"}}`
+	user := auth.User{
+		ID:      "user-test",
+		Nick:    "user-nick",
+		Picture: "user-picture",
+		Email:   "user@email.com",
+	}
+
+	authHeaderBytes, _ := json.Marshal(map[string]any{"user": user})
+	authHeader := string(authHeaderBytes)
 
 	h := NewApi("testversion", "", p)
 	a := apitest.NewWithHandler(h)
@@ -67,12 +76,13 @@ func TestNewApi(t *testing.T) {
 		body := r.BodyJsonMap()
 		expectedBody := map[string]interface{}{
 			"id":                body["id"],
+			"author":            user,
 			"title":             "My Post",
 			"body":              "This is my body",
 			"creation_time":     body["creation_time"],
 			"modification_time": body["modification_time"],
 		}
-		biff.AssertEqual(r.BodyJsonMap(), expectedBody)
+		biff.AssertEqualJson(r.BodyJsonMap(), expectedBody)
 	})
 
 	t.Run("List posts (1)", func(t *testing.T) {
@@ -95,8 +105,10 @@ func TestNewApi(t *testing.T) {
 		biff.AssertEqual(r.StatusCode, http.StatusBadRequest)
 
 		expectedBody := map[string]interface{}{
-			"title":       "Bad Request",
-			"description": "title is too long",
+			"error": map[string]interface{}{
+				"title":       "Bad Request",
+				"description": "title is too long",
+			},
 		}
 		biff.AssertEqual(r.BodyJsonMap(), expectedBody)
 	})

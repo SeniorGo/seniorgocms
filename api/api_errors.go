@@ -18,3 +18,8 @@ var ErrorPostNotFound = HttpError{
 	Status:      http.StatusNotFound,
 	Description: "Post not found",
 }
+
+var ErrorPostForbidden = HttpError{
+	Status:      http.StatusForbidden,
+	Description: "You are not authorized to perform this action for this post",
+}

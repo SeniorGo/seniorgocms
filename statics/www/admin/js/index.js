@@ -46,9 +46,13 @@ function SavePost(post) {
     body: JSON.stringify(post),
   })
     .then((resp) => resp.json())
-    .then((newPost) => {
-      Object.assign(lastPost, newPost);
-      EditPost(lastPost);
+    .then((payload) => {
+        if (payload.error) {
+            alert(payload.error.description);
+            return;
+        }
+        Object.assign(lastPost, payload);
+        EditPost(lastPost);
     });
 }
 
@@ -57,6 +61,12 @@ function DeletePost(post) {
     method: "DELETE",
     headers: fakeHeaders,
   }).then((resp) => {
+      if (resp.status !== 204) {
+          resp.json().then(payload => {
+              alert(payload.error.description)
+          })
+          return;
+      }
     document.getElementById("editor").style.display = "none";
     itemSelected.style.display = "none";
     itemSelected = null;

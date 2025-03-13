@@ -14,12 +14,14 @@ type Auth struct {
 	Session struct {
 		ID string `json:"id"`
 	} `json:"session"`
-	User struct {
-		ID      string `json:"id"`
-		Nick    string `json:"nick"`
-		Picture string `json:"picture"`
-		Email   string `json:"email"`
-	} `json:"user"`
+	User User `json:"user"`
+}
+
+type User struct {
+	ID      string `json:"id"`
+	Nick    string `json:"nick"`
+	Picture string `json:"picture"`
+	Email   string `json:"email"`
 }
 
 var ErrUnauthorized = errors.New("unauthorized")
