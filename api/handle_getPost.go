@@ -16,6 +16,9 @@ func HandleGetPost(ctx context.Context, r *http.Request) (*Post, error) {
 		log.Println("p.Get:", err)
 		return nil, ErrorPersistenceRead
 	}
+	if post == nil {
+		return nil, ErrorPostNotFound
+	}
 
 	return &post.Item, nil
 }

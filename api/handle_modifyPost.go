@@ -22,6 +22,9 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 		log.Println("p.Get:", err)
 		return nil, ErrorPersistenceRead
 	}
+	if post == nil {
+		return nil, ErrorPostNotFound
+	}
 
 	post.Item.ModificationTime = time.Now()
 
