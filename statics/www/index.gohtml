@@ -27,7 +27,8 @@
         <h2>{{ .Title }}</h2>
       </div>
       <div class="card-body">
-        <small>{{ .CreationTime }}</small>
+        {{ if .Author.Nick }}<small class="card-author">By {{ .Author.Nick }}</small>{{end}}
+        <small class="card-date">{{ .CreationTime }}</small>
         <p>{{ .Body }}</p>
       </div>
     </article>

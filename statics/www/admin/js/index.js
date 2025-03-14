@@ -1,7 +1,12 @@
 const list = document.getElementById("list");
 
 const fakeHeaders = {
-  'X-Glue-Authentication': JSON.stringify({user: {id: 'user-fake-id'}}),
+  'X-Glue-Authentication': JSON.stringify({
+      user: {
+          id: 'user-fake-id',
+          nick: 'Fulanez',
+      },
+  }),
 };
 
 let itemSelected = null;

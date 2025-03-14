@@ -255,6 +255,15 @@ button:hover {
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
+.card-author {
+  font-size: 80%;
+  font-weight: bold;
+}
+
+.card-date {
+  font-size: 80%;
+}
+
 .card-body {
   flex: 1 1 auto;
   padding: 1.25rem;
