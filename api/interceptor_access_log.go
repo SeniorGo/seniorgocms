@@ -15,7 +15,11 @@ func InterceptorAccessLog(next box.H) box.H {
 		if forwardedIp := r.Header.Get("X-Forwarded-For"); forwardedIp != "" {
 			ip = forwardedIp
 		}
-		log.Println(ip, r.Method, r.URL.String(), box.GetBoxContext(ctx).Action.Name)
+		action := "<no-action>"
+		if boxAction := box.GetBoxContext(ctx).Action; boxAction != nil {
+			action = boxAction.Name
+		}
+		log.Println(ip, r.Method, r.URL.String(), action)
 		next(ctx)
 	}
 }
