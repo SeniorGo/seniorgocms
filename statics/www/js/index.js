@@ -7,7 +7,9 @@ const versionContainer = document.getElementById("version");
 fetch("/version")
   .then((req) => req.text())
   .then((version) => {
-    versionContainer.innerText = version;
+    if (versionContainer) {
+      versionContainer.innerText = version;
+    }
   });
 
 fetch("/auth/me")
