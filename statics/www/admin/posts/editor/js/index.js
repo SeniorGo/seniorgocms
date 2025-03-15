@@ -45,9 +45,5 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     const post = await postService.getPost({ id: currentPostId });
     postTitleInput.value = post.title;
     postBodyInput.value = post.body;
-
-    editorBtn.textContent = "Editar Post";
-  } else {
-    editorBtn.textContent = "Crear Post";
   }
 });
