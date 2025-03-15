@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listado de Posts - Mejorado</title>
+    <!-- DaisyUI y Tailwind via CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-base-100">
+    <!-- Navbar -->
+    <nav class="navbar bg-base-100 shadow">
+      <div class="flex-1">
+        <a href="#" class="btn btn-ghost normal-case text-xl">Company</a>
+        <ul class="menu menu-horizontal hidden lg:flex ml-4">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Resources</a></li>
+        </ul>
+      </div>
+      <div class="flex-none space-x-2">
+        <a href="login.html" class="btn btn-ghost">Login</a>
+        <a href="contributors.html" class="btn btn-ghost">Contributors</a>
+        <a href="#" class="btn btn-primary">Contact Us</a>
+      </div>
+    </nav>
+
+    <!-- Hero / Encabezado principal -->
+    <section class="hero py-8 bg-base-200">
+      <div class="text-center hero-content">
+        <div class="max-w-md">
+          <h1 class="text-4xl font-bold mb-2">Tu Blog Principal</h1>
+          <p class="text-lg text-gray-600">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do
+            eiusmod tempor incididunt ut labore et dolore.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filtro de categorías (Tabs) -->
+    <div class="container mx-auto mt-6">
+      <div class="tabs justify-center">
+        <a class="tab tab-bordered tab-active">Todos</a>
+        <a class="tab tab-bordered">Diseño</a>
+        <a class="tab tab-bordered">Branding</a>
+        <a class="tab tab-bordered">Ilustraciones</a>
+        <a class="tab tab-bordered">Íconos</a>
+        <a class="tab tab-bordered">Temas</a>
+      </div>
+    </div>
+
+    <!-- Listado de posts -->
+    <div class="container mx-auto mt-10 px-4 lg:px-0">
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Card 1 - Ejemplo con "Featured" -->
+        <div class="card bg-base-100 shadow-xl">
+          <figure>
+            <img
+              src="https://picsum.photos/600/400?random=1"
+              alt="Imagen Post 1"
+            />
+          </figure>
+          <div class="card-body">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">Marketing</span>
+              <span class="badge badge-secondary">Featured</span>
+            </div>
+            <h2 class="card-title mt-2">Título del Post 1</h2>
+            <p class="text-gray-600">
+              Breve descripción o resumen del contenido para el post. Lorem
+              ipsum dolor sit amet, consectetur...
+            </p>
+            <div class="card-actions justify-end mt-4">
+              <a href="post.html" class="btn btn-primary"
+                >Leer artículo completo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card bg-base-100 shadow-xl">
+          <figure>
+            <img
+              src="https://picsum.photos/600/400?random=2"
+              alt="Imagen Post 2"
+            />
+          </figure>
+          <div class="card-body">
+            <span class="text-sm text-gray-500">Diseño</span>
+            <h2 class="card-title mt-2">Título del Post 2</h2>
+            <p class="text-gray-600">
+              Aquí un breve resumen del contenido para el post número 2. Lorem
+              ipsum dolor sit amet, consectetur...
+            </p>
+            <div class="card-actions justify-end mt-4">
+              <a href="post.html" class="btn btn-primary"
+                >Leer artículo completo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card bg-base-100 shadow-xl">
+          <figure>
+            <img
+              src="https://picsum.photos/600/400?random=3"
+              alt="Imagen Post 3"
+            />
+          </figure>
+          <div class="card-body">
+            <span class="text-sm text-gray-500">Branding</span>
+            <h2 class="card-title mt-2">Título del Post 3</h2>
+            <p class="text-gray-600">
+              Breve descripción o resumen del post 3. Lorem ipsum dolor sit
+              amet, consectetur...
+            </p>
+            <div class="card-actions justify-end mt-4">
+              <a href="post.html" class="btn btn-primary"
+                >Leer artículo completo</a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Agrega más tarjetas según sea necesario -->
+      </div>
+    </div>
+
+    <!-- Footer opcional -->
+    <footer class="footer footer-center p-4 bg-base-200 mt-10">
+      <div>
+        <p>
+          Copyright © 2025 -
+          <a class="link link-primary" href="#">Mi Blog</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

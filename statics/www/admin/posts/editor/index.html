@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SeniorGoCMS - Admin Panel</title>
     <link
-      href="../lib/daisyui5/daisyui@5.css"
+      href="../../../lib/daisyui5/daisyui@5.css"
       rel="stylesheet"
       type="text/css"
     />
-    <script src="../lib/daisyui5/browser@4.js"></script>
+    <script src="../../../lib/daisyui5/browser@4.js"></script>
   </head>
   <body class="bg-base-100">
     <nav class="navbar bg-base-100 shadow">
@@ -31,7 +31,7 @@
           >
             <li><a>Perfil (?)</a></li>
             <li><a>Configuración (?)</a></li>
-            <li><a href="/admin/logout">Cerrar sesión</a></li>
+            <li><a href="/auth/logout">Cerrar sesión</a></li>
           </ul>
         </div>
       </div>
@@ -64,8 +64,47 @@
       </aside>
 
       <main class="flex-1 p-4 overflow-auto">
-        <h1>Bienvenido!</h1>
+        <section class="w-full">
+          <form
+            id="post-form"
+            class="w-full h-full p-4 bg-base-200 shadow rounded"
+          >
+            <div class="form-control w-full">
+              <label class="label" for="post-title">
+                <span class="label-text">Título</span>
+              </label>
+              <input
+                type="text"
+                id="post-title"
+                name="post-title"
+                placeholder="Escribe el título"
+                class="input input-bordered w-full"
+                required
+              />
+            </div>
+            <div class="form-control w-full mt-4">
+              <label class="label" for="post-body">
+                <span class="label-text">Cuerpo</span>
+              </label>
+              <textarea
+                id="post-body"
+                name="post-body"
+                placeholder="Escribe el contenido del post"
+                class="textarea textarea-bordered w-full"
+                rows="20"
+                required
+              ></textarea>
+            </div>
+            <div class="form-control mt-6">
+              <button id="editor-btn" type="submit" class="btn btn-primary">
+                Crear Post
+              </button>
+            </div>
+          </form>
+        </section>
       </main>
     </div>
+
+    <script src="js/index.js" type="module"></script>
   </body>
 </html>

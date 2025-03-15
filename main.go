@@ -1,15 +1,11 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"time"
-
-	"github.com/google/uuid"
 
 	"github.com/SeniorGo/seniorgocms/api"
 	"github.com/SeniorGo/seniorgocms/discord"
@@ -55,18 +51,6 @@ func main() {
 	if err != nil {
 		log.Println("Error creating persistence file:", err.Error())
 		return
-	}
-
-	posts, _ := p.List(context.Background())
-	if len(posts) == 0 {
-		p.Put(context.Background(), &persistence.ItemWithId[api.Post]{
-			Id: uuid.NewString(),
-			Item: api.Post{
-				Title:        "First post",
-				Body:         "Este es el primer artículo insertado desde el main :D",
-				CreationTime: time.Now(),
-			},
-		})
 	}
 
 	// Instanciamos API y server

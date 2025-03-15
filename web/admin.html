@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Panel</title>
+    <!-- DaisyUI y Tailwind vía CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-base-100" onload="showTab('posts')">
+    <!-- Barra superior (navbar) -->
+    <nav class="navbar bg-base-100 shadow">
+      <div class="flex-1">
+        <a href="#" class="btn btn-ghost normal-case text-xl">Mi Admin</a>
+      </div>
+      <div class="flex-none">
+        <div class="dropdown dropdown-end">
+          <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+            <div class="w-10 rounded-full">
+              <!-- Avatar de ejemplo -->
+              <img src="https://i.pravatar.cc/100?img=1" alt="Avatar Admin" />
+            </div>
+          </label>
+          <ul
+            tabindex="0"
+            class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li><a>Perfil</a></li>
+            <li><a>Configuración</a></li>
+            <li><a href="logout.html">Cerrar sesión</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenedor principal con sidebar fijo y contenido -->
+    <div class="flex h-screen">
+      <!-- Sidebar (barra lateral) -->
+      <aside class="w-64 bg-base-200 p-4 hidden md:block">
+        <ul class="menu">
+          <li class="menu-title"><span>Navegación</span></li>
+          <li>
+            <a href="#posts" onclick="showTab('posts')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7V4H5v3M5 11h14M5 15h14M5 19h14"
+                />
+              </svg>
+              Posts
+            </a>
+          </li>
+          <li>
+            <a href="#categories" onclick="showTab('categories')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                />
+              </svg>
+              Categorías
+            </a>
+          </li>
+          <li>
+            <a href="#users" onclick="showTab('users')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5.121 17.804A9 9 0 1119 10.999m-5 5v5m-4-5v5"
+                />
+              </svg>
+              Usuarios
+            </a>
+          </li>
+          <li>
+            <a href="#settings" onclick="showTab('settings')">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.75 3.25L4 8.25V20h16V8.25l-5.75-5m-3.5 0v5m4.5 4.5H9m0 0H7.5m1.5 0H12m0 0h1.5"
+                />
+              </svg>
+              Configuración
+            </a>
+          </li>
+          <li class="menu-title mt-4"><span>Salir</span></li>
+          <li><a href="logout.html">Cerrar sesión</a></li>
+        </ul>
+      </aside>
+
+      <!-- Contenido principal -->
+      <main class="flex-1 p-4 overflow-auto">
+        <!-- Sección: Posts -->
+        <section id="posts">
+          <h1 class="text-2xl font-bold mb-4">Administrar Posts</h1>
+
+          <!-- Cards informativas (Stats) -->
+          <div class="stats shadow mb-6">
+            <div class="stat">
+              <div class="stat-title">Total de Posts</div>
+              <div class="stat-value">23</div>
+              <div class="stat-desc">Actualizado hoy</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Posts publicados</div>
+              <div class="stat-value">18</div>
+              <div class="stat-desc">En los últimos 30 días</div>
+            </div>
+          </div>
+
+          <!-- Botón para crear nuevo recurso -->
+          <div class="mb-4">
+            <a href="crear-post.html" class="btn btn-primary"
+              >Crear nuevo post</a
+            >
+          </div>
+
+          <!-- Tabla de posts -->
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Fila de ejemplo -->
+                <tr>
+                  <td>1</td>
+                  <td>Primer Post</td>
+                  <td>2025-03-14</td>
+                  <td>
+                    <a
+                      href="editar-post.html?id=1"
+                      class="btn btn-sm btn-warning"
+                      >Editar</a
+                    >
+                    <button class="btn btn-sm btn-error">Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Segundo Post</td>
+                  <td>2025-03-15</td>
+                  <td>
+                    <a
+                      href="editar-post.html?id=2"
+                      class="btn btn-sm btn-warning"
+                      >Editar</a
+                    >
+                    <button class="btn btn-sm btn-error">Eliminar</button>
+                  </td>
+                </tr>
+                <!-- Más filas según tus datos -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Sección: Categorías -->
+        <section id="categories" class="tab-content hidden">
+          <h1 class="text-2xl font-bold mb-4">Administrar Categorías</h1>
+
+          <!-- Cards informativas -->
+          <div class="stats shadow mb-6">
+            <div class="stat">
+              <div class="stat-title">Total de Categorías</div>
+              <div class="stat-value">5</div>
+              <div class="stat-desc">Actualizado hoy</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Categorías activas</div>
+              <div class="stat-value">4</div>
+              <div class="stat-desc">Últimos 30 días</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <a href="crear-categoria.html" class="btn btn-primary"
+              >Crear nueva categoría</a
+            >
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Ejemplo -->
+                <tr>
+                  <td>1</td>
+                  <td>Diseño</td>
+                  <td>Recursos de diseño</td>
+                  <td>
+                    <a
+                      href="editar-categoria.html?id=1"
+                      class="btn btn-sm btn-warning"
+                      >Editar</a
+                    >
+                    <button class="btn btn-sm btn-error">Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Marketing</td>
+                  <td>Estrategias y técnicas</td>
+                  <td>
+                    <a
+                      href="editar-categoria.html?id=2"
+                      class="btn btn-sm btn-warning"
+                      >Editar</a
+                    >
+                    <button class="btn btn-sm btn-error">Eliminar</button>
+                  </td>
+                </tr>
+                <!-- Más filas -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Sección: Usuarios -->
+        <section id="users" class="tab-content hidden">
+          <h1 class="text-2xl font-bold mb-4">Administrar Usuarios</h1>
+
+          <!-- Cards informativas -->
+          <div class="stats shadow mb-6">
+            <div class="stat">
+              <div class="stat-title">Total de Usuarios</div>
+              <div class="stat-value">100</div>
+              <div class="stat-desc">Actualizado hoy</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Nuevos este mes</div>
+              <div class="stat-value">12</div>
+              <div class="stat-desc">Últimos 30 días</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <a href="crear-usuario.html" class="btn btn-primary"
+              >Crear nuevo usuario</a
+            >
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Usuario</th>
+                  <th>Correo</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Ejemplo -->
+                <tr>
+                  <td>1</td>
+                  <td>admin</td>
+                  <td>admin@ejemplo.com</td>
+                  <td>
+                    <a
+                      href="editar-usuario.html?id=1"
+                      class="btn btn-sm btn-warning"
+                      >Editar</a
+                    >
+                    <button class="btn btn-sm btn-error">Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>johndoe</td>
+                  <td>johndoe@ejemplo.com</td>
+                  <td>
+                    <a
+                      href="editar-usuario.html?id=2"
+                      class="btn btn-sm btn-warning"
+                      >Editar</a
+                    >
+                    <button class="btn btn-sm btn-error">Eliminar</button>
+                  </td>
+                </tr>
+                <!-- Más filas -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Sección: Configuración -->
+        <section id="settings" class="tab-content hidden">
+          <h1 class="text-2xl font-bold mb-4">Configuración</h1>
+          <p>
+            Aquí irían las opciones de configuración general de tu sitio o
+            aplicación.
+          </p>
+        </section>
+      </main>
+    </div>
+
+    <!-- Script para mostrar/ocultar contenido según el recurso seleccionado -->
+    <script>
+      /*function showTab(tabId) {
+        // Ocultar todas las secciones
+        const sections = document.querySelectorAll(".tab-content");
+        sections.forEach((section) => {
+          section.classList.add("hidden");
+        });
+
+        // Mostrar la sección seleccionada
+        const target = document.getElementById(tabId);
+        if (target) {
+          target.classList.remove("hidden");
+        }
+      }*/
+    </script>
+  </body>
+</html>

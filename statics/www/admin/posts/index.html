@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SeniorGoCMS - Admin Panel</title>
     <link
-      href="../lib/daisyui5/daisyui@5.css"
+      href="../../lib/daisyui5/daisyui@5.css"
       rel="stylesheet"
       type="text/css"
     />
-    <script src="../lib/daisyui5/browser@4.js"></script>
+    <script src="../../lib/daisyui5/browser@4.js"></script>
   </head>
   <body class="bg-base-100">
     <nav class="navbar bg-base-100 shadow">
@@ -31,7 +31,7 @@
           >
             <li><a>Perfil (?)</a></li>
             <li><a>Configuración (?)</a></li>
-            <li><a href="/admin/logout">Cerrar sesión</a></li>
+            <li><a href="/auth/logout">Cerrar sesión</a></li>
           </ul>
         </div>
       </div>
@@ -64,8 +64,46 @@
       </aside>
 
       <main class="flex-1 p-4 overflow-auto">
-        <h1>Bienvenido!</h1>
+        <section id="posts">
+          <h1 class="text-2xl font-bold mb-4">Administrar Posts</h1>
+
+          <div class="stats shadow mb-6">
+            <div class="stat">
+              <div class="stat-title">Total de Posts</div>
+              <div class="stat-value">23</div>
+              <div class="stat-desc">Actualizado hoy</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Posts publicados</div>
+              <div class="stat-value">18</div>
+              <div class="stat-desc">En los últimos 30 días</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <a href="/admin/posts/editor" class="btn btn-primary"
+              >Crear nuevo post</a
+            >
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Fecha de creación</th>
+                  <th>Fecha de modificación</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="posts-tbody"></tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </div>
+
+    <script src="js/index.js" type="module"></script>
   </body>
 </html>
