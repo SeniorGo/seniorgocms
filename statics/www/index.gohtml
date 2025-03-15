@@ -88,7 +88,7 @@
               <span class="badge badge-secondary">Nuevo</span>
             </div>
             <h2 class="card-title mt-2">{{ .Title }}</h2>
-            <p class="text-gray-600">
+            <p class="text-gray-600 text-ellipsis" style="word-wrap: break-word; max-height: 3.5em; overflow: hidden;">
               {{ if .Author.Nick }}<small>By {{ .Author.Nick }}</small>{{end}}
               {{ .Body }}
             </p>
