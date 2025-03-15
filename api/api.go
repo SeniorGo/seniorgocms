@@ -36,6 +36,8 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 		w.Write([]byte(version))
 	}).WithName("version")
 
+	b.Handle("GET", "/sitemap.xml", HandleSitemap)
+
 	v0 := b.Group("/v0").WithInterceptors(auth.Require)
 	v0.Handle("GET", "/posts", HandleListPosts)
 	v0.Handle("POST", "/posts", HandleCreatePost)
