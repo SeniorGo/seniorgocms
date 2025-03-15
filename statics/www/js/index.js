@@ -1,7 +1,13 @@
+const loginBtn = document.getElementById("auth_login");
+const adminBtn = document.getElementById("auth_admin");
+const logoutBtn = document.getElementById("auth_logout");
+const nickLink = document.getElementById("auth_nick");
+const versionContainer = document.getElementById("version");
+
 fetch("/version")
   .then((req) => req.text())
   .then((version) => {
-    document.getElementById("version").innerText = version;
+    versionContainer.innerText = version;
   });
 
 fetch("/auth/me")
@@ -9,15 +15,17 @@ fetch("/auth/me")
   .then((payload) => {
     if (payload.error) {
       // No logged in
-      document.getElementById("auth_login").style.display = "";
+      loginBtn.style.display = "inline-flex";
+      adminBtn.style.display = "none";
+      logoutBtn.style.display = "none";
+      nickLink.style.display = "none";
+      nickLink.innerText = "";
     } else {
       // Logged in
-      console.log(payload);
-      console.log(payload.nick);
-      document.getElementById("auth_admin").style.display = "";
-      document.getElementById("auth_logout").style.display = "";
-      document.getElementById("auth_nick").style.display = "";
-      document.getElementById("auth_login").style.display = "";
-      document.getElementById("auth_nick").innerText = payload.nick;
+      loginBtn.style.display = "none";
+      adminBtn.style.display = "inline-flex";
+      logoutBtn.style.display = "inline-flex";
+      nickLink.style.display = "inline-flex";
+      nickLink.innerText = payload.nick;
     }
   });

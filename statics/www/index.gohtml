@@ -58,7 +58,7 @@
     </section>
 
     <!-- Category filters -->
-    <div class="container mx-auto mt-6">
+    <!-- <div class="container mx-auto mt-6">
       <div class="tabs justify-center">
         <a class="tab tab-bordered tab-active">Todos</a>
         <a class="tab tab-bordered">Categoría A</a>
@@ -68,6 +68,7 @@
         <a class="tab tab-bordered">Categoría E</a>
       </div>
     </div>
+    -->
 
     <!-- Posts -->
     <div class="container mx-auto mt-10 px-4 lg:px-0">
@@ -83,10 +84,12 @@
           </figure>
           -->
           <div class="card-body">
+            <!--
             <div class="flex items-center justify-between">
               <span class="text-sm text-gray-500">Categoria A</span>
               <span class="badge badge-secondary">Nuevo</span>
             </div>
+            -->
             <h2 class="card-title mt-2">{{ .Title }}</h2>
             <p class="text-gray-600 text-ellipsis" style="word-wrap: break-word; max-height: 3.5em; overflow: hidden;">
               {{ if .Author.Nick }}<small>By {{ .Author.Nick }}</small>{{end}}

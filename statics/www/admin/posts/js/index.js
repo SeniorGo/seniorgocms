@@ -1,6 +1,11 @@
 import { PostService } from "./post-service.js";
 
 const postsTableBody = document.getElementById("posts-tbody");
+const confirmDialog = document.getElementById("confirm-dialog");
+const deleteBtnOfDialog = document.getElementById("delete-btn-dialog");
+const cancelBtnOfDialog = document.getElementById("cancel-btn-dialog");
+
+let selectedPostToDelete = null;
 
 const fakeHeaders = {
   "X-Glue-Authentication": JSON.stringify({
@@ -45,7 +50,8 @@ function addPost(post) {
   deleteButton.classList.add("btn", "btn-sm", "btn-error", "delete-btn");
   deleteButton.textContent = "Eliminar";
   deleteButton.addEventListener("click", () => {
-    deletePost(post.id);
+    selectedPostToDelete = post;
+    confirmDialog.showModal();
   });
   td.appendChild(deleteButton);
   tr.appendChild(td);
@@ -81,5 +87,16 @@ async function loadPosts() {
     console.error("Error loading posts:", error);
   }
 }
+
+deleteBtnOfDialog.addEventListener("click", async () => {
+  if (selectedPostToDelete !== null) {
+    await deletePost(selectedPostToDelete.id);
+    selectedPostToDelete = null;
+  }
+});
+
+cancelBtnOfDialog.addEventListener("click", () => {
+  selectedPostToDelete = null;
+});
 
 loadPosts();
