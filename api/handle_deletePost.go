@@ -6,15 +6,23 @@ import (
 	"net/http"
 
 	"github.com/SeniorGo/seniorgocms/auth"
+	"github.com/SeniorGo/seniorgocms/persistence"
 )
 
-func HandleDeletePost(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
-	postId := r.PathValue("postId")
-	p := GetPersistence(ctx)
+type deletePost struct {
+	postRepo persistence.Persistencer[Post]
+}
 
-	post, err := p.Get(ctx, postId)
+func newDeletePost(postRepo persistence.Persistencer[Post]) *deletePost {
+	return &deletePost{postRepo: postRepo}
+}
+
+func (h *deletePost) Handle(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+	postId := r.PathValue("postId")
+
+	post, err := h.postRepo.Get(ctx, postId)
 	if err != nil {
-		log.Println("p.Get", err)
+		log.Println("h.postRepo.Get", err)
 		return ErrorPersistenceRead
 	}
 	if post == nil {
@@ -26,9 +34,9 @@ func HandleDeletePost(ctx context.Context, w http.ResponseWriter, r *http.Reques
 		return ErrorPostForbidden
 	}
 
-	err = p.Delete(ctx, postId)
+	err = h.postRepo.Delete(ctx, postId)
 	if err != nil {
-		log.Println("p.Delete:", err)
+		log.Println("h.postRepo.Delete:", err)
 		return ErrorPersistenceWrite
 	}
 

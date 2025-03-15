@@ -4,17 +4,24 @@ import (
 	"log"
 	"net/http"
 	"sort"
+
+	"github.com/SeniorGo/seniorgocms/persistence"
 )
 
-func HandleListPosts(w http.ResponseWriter, r *http.Request) ([]Post, error) {
+type listPosts struct {
+	postRepo persistence.Persistencer[Post]
+}
 
+func newListPosts(postRepo persistence.Persistencer[Post]) *listPosts {
+	return &listPosts{postRepo: postRepo}
+}
+
+func (h *listPosts) Handle(w http.ResponseWriter, r *http.Request) ([]Post, error) {
 	ctx := r.Context()
 
-	p := GetPersistence(ctx)
-
-	posts, err := p.List(ctx)
+	posts, err := h.postRepo.List(ctx)
 	if err != nil {
-		log.Println("p.List:", err)
+		log.Println("h.postRepo.List:", err)
 		return nil, ErrorPersistenceRead
 	}
 

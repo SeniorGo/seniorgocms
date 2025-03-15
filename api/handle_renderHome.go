@@ -5,11 +5,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/SeniorGo/seniorgocms/persistence"
 	"github.com/SeniorGo/seniorgocms/statics"
 )
 
-func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
+type renderHome struct {
+	postRepo persistence.Persistencer[Post]
+}
 
+func newRenderHome(postRepo persistence.Persistencer[Post]) *renderHome {
+	return &renderHome{postRepo: postRepo}
+}
+
+func (h *renderHome) Handle(w http.ResponseWriter, r *http.Request) error {
 	// Requires recompile to see changes!!!
 	b, err := statics.Www.ReadFile("www/index.gohtml")
 	if err != nil {
@@ -25,7 +33,7 @@ func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	posts, err := HandleListPosts(w, r)
+	posts, err := newListPosts(h.postRepo).Handle(w, r)
 	if err != nil {
 		return err
 	}

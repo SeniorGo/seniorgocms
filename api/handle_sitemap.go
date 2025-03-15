@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/xml"
 	"net/http"
+
+	"github.com/SeniorGo/seniorgocms/persistence"
 )
 
 // type SitemapURL struct {
@@ -12,6 +14,14 @@ import (
 // 	ChangeFreq string    // Frecuencia de cambio (daily, weekly, etc.)
 // 	Priority   float64   // Prioridad (de 0.0 a 1.0)
 // }
+
+type sitemap struct {
+	postRepo persistence.Persistencer[Post]
+}
+
+func newSitemap(postRepo persistence.Persistencer[Post]) *sitemap {
+	return &sitemap{postRepo: postRepo}
+}
 
 type urlset struct {
 	XMLName xml.Name     `xml:"urlset"`
@@ -26,8 +36,7 @@ type urlElement struct {
 	Priority   float64 `xml:"priority,omitempty"`
 }
 
-func HandleSitemap(w http.ResponseWriter, ctx context.Context) error {
-
+func (h *sitemap) Handle(w http.ResponseWriter, ctx context.Context) error {
 	baseUrl := "https://seniorgocms.holacloud.app" // TODO: hardcoded!
 
 	u := urlset{
@@ -39,7 +48,7 @@ func HandleSitemap(w http.ResponseWriter, ctx context.Context) error {
 		ChangeFreq: "weekly",
 	})
 
-	posts, err := GetPersistence(ctx).List(ctx)
+	posts, err := h.postRepo.List(ctx)
 	if err != nil {
 		return err
 	}

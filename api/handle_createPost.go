@@ -12,13 +12,20 @@ import (
 	"github.com/SeniorGo/seniorgocms/persistence"
 )
 
+type createPost struct {
+	postRepo persistence.Persistencer[Post]
+}
+
 type CreatePostRequest struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`
 }
 
-func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
+func newCreatePost(postRepo persistence.Persistencer[Post]) *createPost {
+	return &createPost{postRepo: postRepo}
+}
 
+func (h *createPost) Handle(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
 	post := Post{
 		Id:           uuid.NewString(),
 		Author:       auth.GetAuth(ctx).User,
@@ -33,13 +40,12 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 		return nil, err
 	}
 
-	p := GetPersistence(ctx)
-	err = p.Put(context.Background(), &persistence.ItemWithId[Post]{
+	err = h.postRepo.Put(context.Background(), &persistence.ItemWithId[Post]{
 		Id:   post.Id,
 		Item: post,
 	})
 	if err != nil {
-		log.Println("p.Put:", err)
+		log.Println("h.postRepo.Put:", err)
 		return nil, ErrorPersistenceWrite
 	}
 

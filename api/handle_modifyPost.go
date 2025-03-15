@@ -7,21 +7,28 @@ import (
 	"time"
 
 	"github.com/SeniorGo/seniorgocms/auth"
+	"github.com/SeniorGo/seniorgocms/persistence"
 )
+
+type modifyPost struct {
+	postRepo persistence.Persistencer[Post]
+}
 
 type ModifyPostRequest struct {
 	Title *string `json:"title"`
 	Body  *string `json:"body"`
 }
 
-func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostRequest) (*Post, error) {
+func newModifyPost(postRepo persistence.Persistencer[Post]) *modifyPost {
+	return &modifyPost{postRepo: postRepo}
+}
 
+func (h *modifyPost) Handle(ctx context.Context, r *http.Request, input *ModifyPostRequest) (*Post, error) {
 	postId := r.PathValue("postId")
-	p := GetPersistence(ctx)
 
-	post, err := p.Get(ctx, postId)
+	post, err := h.postRepo.Get(ctx, postId)
 	if err != nil {
-		log.Println("p.Get:", err)
+		log.Println("h.postRepo.Get:", err)
 		return nil, ErrorPersistenceRead
 	}
 	if post == nil {
@@ -49,9 +56,9 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 		return nil, err
 	}
 
-	err = p.Put(ctx, post)
+	err = h.postRepo.Put(ctx, post)
 	if err != nil {
-		log.Println("p.Put:", err)
+		log.Println("h.postRepo.Put:", err)
 		return nil, ErrorPersistenceWrite
 	}
 

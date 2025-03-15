@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/fulldump/box"
@@ -11,7 +10,7 @@ import (
 	"github.com/SeniorGo/seniorgocms/statics"
 )
 
-func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.Handler {
+func NewApi(version, staticsDir string, postRepo persistence.Persistencer[Post]) http.Handler {
 
 	b := box.NewBox()
 
@@ -20,30 +19,23 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 		PrettyError,
 	)
 
-	b.WithInterceptors(func(next box.H) box.H {
-		return func(ctx context.Context) {
-			ctx = context.WithValue(ctx, "persistence", p)
-			next(ctx)
-		}
-	})
-
 	b.HandleResourceNotFound = HandleNotFound
 	b.HandleMethodNotAllowed = HandleMethodNotAllowed
 
-	b.Handle("GET", "/", HandleRenderHome)
-	b.Handle("GET", "/posts/{postId}", HandleRenderPost)
+	b.Handle("GET", "/", newRenderHome(postRepo).Handle)
+	b.Handle("GET", "/posts/{postId}", newRenderPost(postRepo).Handle)
 	b.Handle("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(version))
 	}).WithName("version")
 
-	b.Handle("GET", "/sitemap.xml", HandleSitemap)
+	b.Handle("GET", "/sitemap.xml", newSitemap(postRepo).Handle)
 
 	v0 := b.Group("/v0").WithInterceptors(auth.Require)
-	v0.Handle("GET", "/posts", HandleListPosts)
-	v0.Handle("POST", "/posts", HandleCreatePost)
-	v0.Handle("GET", "/posts/{postId}", HandleGetPost)
-	v0.Handle("PATCH", "/posts/{postId}", HandleModifyPost)
-	v0.Handle("DELETE", "/posts/{postId}", HandleDeletePost)
+	v0.Handle("GET", "/posts", newListPosts(postRepo).Handle)
+	v0.Handle("POST", "/posts", newCreatePost(postRepo).Handle)
+	v0.Handle("GET", "/posts/{postId}", newGetPost(postRepo).Handle)
+	v0.Handle("PATCH", "/posts/{postId}", newModifyPost(postRepo).Handle)
+	v0.Handle("DELETE", "/posts/{postId}", newDeletePost(postRepo).Handle)
 
 	// openapi
 	buildOpenApi(b)
