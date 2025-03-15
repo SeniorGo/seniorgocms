@@ -1,54 +1,124 @@
-<!-- This file requires recompilation to reflect changes -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
-    <title></title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="css/reset.css" rel="stylesheet" />
-    <link href="css/global.css" rel="stylesheet" />
-    <link href="css/index.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SeniorGoCMS</title>
+    <link
+      href="../lib/daisyui5/daisyui@5.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="../lib/daisyui5/browser@4.js"></script>
   </head>
-  <body>
-   <nav class="navbar mb-2">
-      <a href="/" class="navbar-brand">SeniorGo CMS - <span id="version"></span></a>
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="/contributors/">Contributors</a></li>
-        <li class="nav-item" id="auth_admin" style="display: none;"><a class="nav-link" href="/admin/">Admin</a></li>
-        <li class="nav-item" id="auth_login" style="display: none;"><a class="nav-link" href="/auth/login">Login</a></li>
-        <li class="nav-item" id="auth_logout" style="display: none;"><a class="nav-link" href="/auth/logout">Logout</a></li>
-        <li class="nav-item" id="auth_nick" style="display: none; font-weight: bold;"></li>
-      </ul>
+  <body class="bg-base-100">
+    <nav class="navbar bg-base-100 shadow">
+      <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl">SeniorGoCMS</a>
+      </div>
+      <div class="flex-none space-x-2">
+        <a href="/contributors" class="btn btn-ghost">Contributors</a>
+        <a
+          id="auth_admin"
+          href="/admin"
+          class="btn btn-ghost"
+          style="display: none"
+          >Admin</a
+        >
+        <a
+          id="auth_logout"
+          href="/auth/logout"
+          class="btn btn-ghost"
+          style="display: none"
+          >Logout</a
+        >
+        <a id="auth_login" href="/auth/login" class="btn btn-primary">Login</a>
+        <a
+          id="auth_nick"
+          href="#"
+          class="btn btn-ghost"
+          style="display: none"
+        ></a>
+      </div>
     </nav>
 
-    {{ range . }}
-    <article class="card">
-      <div class="card-header">
-        <h2>{{ .Title }}</h2>
+    <section class="hero py-8 bg-base-200">
+      <div class="text-center hero-content">
+        <div class="max-w-md">
+          <h1 class="text-4xl font-bold mb-2">
+            SeniorGoCMS <span id="version"></span>
+          </h1>
+          <p class="text-lg text-gray-600">
+            Escribe, comparte y conecta con la comunidad para inspirar, aprender
+            y difundir tus experiencias y conocimientos de manera sencilla y
+            efectiva.
+          </p>
+        </div>
       </div>
-      <div class="card-body">
-        {{ if .Author.Nick }}<small class="card-author">By {{ .Author.Nick }}</small>{{end}}
-        <small class="card-date">{{ .CreationTime }}</small>
-        <p>{{ .Body }}</p>
-      </div>
-    </article>
-    {{ else }}
-    <p>No hay posts aún.</p>
-    {{ end }}
+    </section>
 
-    <footer style="border-top: solid silver 1px; text-align: center">
-      Hecho con ❤️ desde
-      <a
-        href="https://discord.com/channels/1235789126033477632/1242312465052602438"
-        >SeniorGo - Latam</a
-      >
-      <br />
-      Contribuye en
-      <a href="https://github.com/SeniorGo/seniorgocms"
-        >github.com/SeniorGo/seniorgocms</a
-      >
-      <br />
-      <a href="/contributors/">Contributors</a>
+    <!-- Category filters -->
+    <!-- <div class="container mx-auto mt-6">
+      <div class="tabs justify-center">
+        <a class="tab tab-bordered tab-active">Todos</a>
+        <a class="tab tab-bordered">Categoría A</a>
+        <a class="tab tab-bordered">Categoría B</a>
+        <a class="tab tab-bordered">Categoría C</a>
+        <a class="tab tab-bordered">Categoría D</a>
+        <a class="tab tab-bordered">Categoría E</a>
+      </div>
+    </div>
+    -->
+
+    <!-- Posts -->
+    <div class="container mx-auto mt-10 px-4 lg:px-0">
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {{ range . }}
+        <div class="card bg-base-100 shadow-xl">
+          <!-- use with post image 
+          <figure>
+            <img
+              src=""
+              alt="Imagen Post 1"
+            />
+          </figure>
+          -->
+          <div class="card-body">
+            <!--
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">Categoria A</span>
+              <span class="badge badge-secondary">Nuevo</span>
+            </div>
+            -->
+            <h2 class="card-title mt-2">{{ .Title }}</h2>
+            <p class="text-gray-600 text-ellipsis" style="word-wrap: break-word; max-height: 3.5em; overflow: hidden;">
+              {{ if .Author.Nick }}<small>By {{ .Author.Nick }}</small>{{end}}
+              {{ .Body }}
+            </p>
+            <div class="card-actions justify-end mt-4">
+              <a href="/posts/{{ .Id }}" class="btn btn-primary">Leer artículo completo</a>
+            </div>
+          </div>
+        </div>
+        {{ else }}
+        <p>No hay posts aún.</p>
+        {{ end }}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-base-200 mt-10">
+      <div>
+        <p>
+          Hecho con ❤️ desde
+          <a
+            class="link link-primary"
+            href="https://discord.com/channels/1235789126033477632/1242312465052602438"
+            target="_blank"
+            >SeniorGo - Latam</a
+          >
+        </p>
+      </div>
     </footer>
 
     <script src="js/index.js" type="module"></script>

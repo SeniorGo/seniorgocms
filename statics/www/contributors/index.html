@@ -1,31 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
-    <title></title>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="../css/reset.css" rel="stylesheet" />
-    <link href="../css/global.css" rel="stylesheet" />
-    <link href="css/index.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contributors</title>
+    <link
+      href="../lib/daisyui5/daisyui@5.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="../lib/daisyui5/browser@4.js"></script>
   </head>
-  <body>
-    <h1>Contributors</h1>
+  <body class="bg-base-100">
+    <nav class="navbar bg-base-100 shadow">
+      <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl">SeniorGoCMS</a>
+      </div>
+    </nav>
 
-    <section class="card">
-      <div class="card-header">Fulanez</div>
-      <div class="card-body">
-        Github: <a href="https://github.com/ZZZZZ">github.com/ZZZZZ</a><br />
-        Otro link...
+    <div class="container mx-auto p-4">
+      <h1 class="text-3xl font-bold mb-6">Contributors</h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <section class="card bg-base-100 shadow-md">
+          <div class="card-header bg-base-200 p-4 font-semibold">Fulldump</div>
+          <div class="card-body p-4">
+            <p>
+              Github:
+              <a href="https://github.com/fulldump" class="link link-primary">
+                github.com/fulldump
+              </a>
+            </p>
+            <p>
+              Youtube:
+              <a href="https://youtube.com/@fulldump" class="link link-primary">
+                youtube.com/@fulldump
+              </a>
+            </p>
+          </div>
+        </section>
+
+        <section class="card bg-base-100 shadow-md">
+          <div class="card-header bg-base-200 p-4 font-semibold">Jibaru</div>
+          <div class="card-body p-4">
+            <p>
+              Github:
+              <a href="https://github.com/Jibaru" class="link link-primary">
+                github.com/Jibaru
+              </a>
+            </p>
+            <p>
+              Youtube:
+              <a
+                href="https://youtube.com/@pull-request"
+                class="link link-primary"
+              >
+                youtube.com/@pull-request
+              </a>
+            </p>
+          </div>
+        </section>
       </div>
-    </section>
-  
-    <section class="card">
-      <div class="card-header">Fulldump</div>
-      <div class="card-body">
-        Github: <a href="https://github.com/fulldump">github.com/fulldump</a><br />
-			  Youtube: <a href="https://youtube.com/@fulldump">youtube.com/@fulldump</a>
-      </div>
-    </section>
-  
+    </div>
   </body>
 </html>

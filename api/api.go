@@ -31,6 +31,7 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 	b.HandleMethodNotAllowed = HandleMethodNotAllowed
 
 	b.Handle("GET", "/", HandleRenderHome)
+	b.Handle("GET", "/posts/{postId}", HandleRenderPost)
 	b.Handle("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(version))
 	}).WithName("version")

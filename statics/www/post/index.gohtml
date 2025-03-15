@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post</title>
+    <link
+      href="../lib/daisyui5/daisyui@5.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="../lib/daisyui5/browser@4.js"></script>
+  </head>
+  <body class="bg-base-100">
+    <nav class="navbar bg-base-100 shadow">
+      <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl">SeniorGoCMS</a>
+      </div>
+      <div class="flex-none space-x-2">
+        <a href="/contributors" class="btn btn-ghost">Contributors</a>
+        <a
+          id="auth_admin"
+          href="/admin"
+          class="btn btn-ghost"
+          style="display: none"
+          >Admin</a
+        >
+        <a
+          id="auth_logout"
+          href="/auth/logout"
+          class="btn btn-ghost"
+          style="display: none"
+          >Logout</a
+        >
+        <a id="auth_login" href="/auth/login" class="btn btn-primary">Login</a>
+        <a
+          id="auth_nick"
+          href="#"
+          class="btn btn-ghost"
+          style="display: none"
+        ></a>
+      </div>
+    </nav>
+
+    <!-- Post Header -->
+    <section class="hero py-8 bg-base-200">
+      <div class="hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 class="text-4xl font-bold mb-2">{{ .Title }}</h1>
+          <!-- <p class="text-gray-600">
+            Categoría: <span class="badge badge-outline">Diseño</span>
+          </p>-->
+          <p class="text-gray-600 mt-2">
+            Publicado el {{ .CreationTime | formatDateES }} {{ if .Author.Nick
+            }} por
+            <strong>{{ .Author.Nick }}</strong>
+            {{ end }}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Image? -->
+    <!--
+    <div class="container mx-auto mt-6">
+      <figure class="max-w-4xl mx-auto">
+        <img
+          src="https://picsum.photos/1200/600?random=5"
+          alt="Imagen destacada del post"
+          class="rounded-lg shadow"
+        />
+      </figure>
+    </div>
+    -->
+
+    <!-- Post content -->
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+      <article class="prose lg:prose-xl mt-6">
+        <p>{{ .Body }}</p>
+      </article>
+
+      <div class="mt-8">
+        <a href="/" class="btn btn-secondary">Volver a la lista de posts</a>
+      </div>
+    </div>
+
+    <!-- Future comments section? -->
+    <!--
+    <div class="container mx-auto max-w-4xl p-4 md:p-8">
+      <h3 class="text-2xl font-semibold mb-4">Comentarios</h3>
+      <div class="space-y-4">
+        <div class="p-4 bg-base-200 rounded">
+          <p class="text-sm text-gray-600">Usuario1:</p>
+          <p>¡Excelente artículo! Me ayudó mucho.</p>
+        </div>
+        <div class="p-4 bg-base-200 rounded">
+          <p class="text-sm text-gray-600">Usuario2:</p>
+          <p>
+            Gracias por la información. ¿Podrías ampliar más sobre el tema X?
+          </p>
+        </div>
+      </div>
+    </div>
+    -->
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-base-200 mt-10">
+      <div>
+        <p>
+          Hecho con ❤️ desde
+          <a
+            class="link link-primary"
+            href="https://discord.com/channels/1235789126033477632/1242312465052602438"
+            target="_blank"
+            >SeniorGo - Latam</a
+          >
+        </p>
+      </div>
+    </footer>
+
+    <script src="../js/index.js" type="module"></script>
+  </body>
+</html>

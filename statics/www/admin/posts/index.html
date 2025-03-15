@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SeniorGoCMS - Admin Panel</title>
+    <link
+      href="../../lib/daisyui5/daisyui@5.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="../../lib/daisyui5/browser@4.js"></script>
+  </head>
+  <body class="bg-base-100">
+    <nav class="navbar bg-base-100 shadow">
+      <div class="flex-1">
+        <a href="/admin" class="btn btn-ghost normal-case text-xl"
+          >SeniorGoCMS - Admin Panel</a
+        >
+      </div>
+      <div class="flex-none">
+        <div class="dropdown dropdown-end">
+          <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+            <div class="w-10 rounded-full">
+              <img src="https://i.pravatar.cc/100?img=1" alt="Avatar Admin" />
+            </div>
+          </label>
+          <ul
+            tabindex="0"
+            class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li><a href="/auth/logout">Cerrar sesión</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="flex h-screen">
+      <aside class="w-64 bg-base-200 p-4 hidden md:block">
+        <ul class="menu">
+          <li class="menu-title"><span>Navegación</span></li>
+          <li>
+            <a href="/admin/posts">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7V4H5v3M5 11h14M5 15h14M5 19h14"
+                />
+              </svg>
+              Posts
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <main class="flex-1 p-4 overflow-auto">
+        <section id="posts">
+          <h1 class="text-2xl font-bold mb-4">Administrar Posts</h1>
+
+          <div class="stats shadow mb-6">
+            <div class="stat">
+              <div class="stat-title">Total de Posts</div>
+              <div class="stat-value">23</div>
+              <div class="stat-desc">Actualizado hoy</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Posts publicados</div>
+              <div class="stat-value">18</div>
+              <div class="stat-desc">En los últimos 30 días</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <a href="/admin/posts/editor" class="btn btn-primary"
+              >Crear nuevo post</a
+            >
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="table w-full">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Título</th>
+                  <th>Fecha de creación</th>
+                  <th>Fecha de modificación</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="posts-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="confirm-dialog" class="modal">
+      <div class="modal-box">
+        <h2 class="font-bold text-lg">Mensaje</h2>
+        <p class="py-4">¿Estás seguro de que lo quieres borrar?</p>
+        <div class="modal-action">
+          <form method="dialog">
+            <button id="delete-btn-dialog" class="btn btn-success">
+              Aceptar
+            </button>
+            <button id="cancel-btn-dialog" class="btn btn-error">
+              Cancelar
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="js/index.js" type="module"></script>
+  </body>
+</html>
