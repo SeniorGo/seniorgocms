@@ -2,6 +2,8 @@ const loginBtn = document.getElementById("auth_login");
 const adminBtn = document.getElementById("auth_admin");
 const logoutBtn = document.getElementById("auth_logout");
 const nickLink = document.getElementById("auth_nick");
+const avatarBtn = document.getElementById("auth_avatar");
+const avatarImg = document.getElementById("auth_avatar_image");
 const versionContainer = document.getElementById("version");
 
 fetch("/version")
@@ -29,5 +31,7 @@ fetch("/auth/me")
       logoutBtn.style.display = "inline-flex";
       nickLink.style.display = "inline-flex";
       nickLink.innerText = payload.nick;
+      avatarBtn.style.display = "inline-flex";
+      avatarImg.src = payload.picture;
     }
   });
