@@ -31,7 +31,8 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 	b.HandleMethodNotAllowed = HandleMethodNotAllowed
 
 	b.Handle("GET", "/", HandleRenderHome)
-	b.Handle("GET", "/posts/{postId}", HandleRenderPost)
+	b.Handle("GET", "/posts/{postId}", HandleRenderPost).
+		WithInterceptors(ResolvePost)
 	b.Handle("GET", "/version", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(version))
 	}).WithName("version")
@@ -41,6 +42,7 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 	v0 := b.Group("/v0").WithInterceptors(auth.Require)
 	v0.Handle("GET", "/posts", HandleListPosts)
 	v0.Handle("POST", "/posts", HandleCreatePost)
+	v0.Group("/posts/{postId}").WithInterceptors(ResolvePost)
 	v0.Handle("GET", "/posts/{postId}", HandleGetPost)
 	v0.Handle("PATCH", "/posts/{postId}", HandleModifyPost)
 	v0.Handle("DELETE", "/posts/{postId}", HandleDeletePost)

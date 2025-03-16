@@ -15,3 +15,13 @@ func GetPersistence(ctx context.Context) persistence.Persistencer[Post] {
 
 	return p
 }
+
+// GetPost from context (where posts are stored)
+func GetPost(ctx context.Context) *persistence.ItemWithId[Post] {
+	p, ok := ctx.Value("post").(*persistence.ItemWithId[Post])
+	if !ok {
+		panic("Post should be in context")
+	}
+
+	return p
+}

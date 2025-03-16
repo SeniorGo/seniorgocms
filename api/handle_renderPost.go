@@ -25,10 +25,7 @@ func HandleRenderPost(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	post, err := HandleGetPost(r.Context(), r)
-	if err != nil {
-		return err
-	}
+	post := GetPost(r.Context())
 
 	err = tmpl.Execute(w, post)
 	if err != nil {

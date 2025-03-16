@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/SeniorGo/seniorgocms/auth"
@@ -14,25 +13,16 @@ type ModifyPostRequest struct {
 	Body  *string `json:"body"`
 }
 
-func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostRequest) (*Post, error) {
+func HandleModifyPost(ctx context.Context, input *ModifyPostRequest) (*Post, error) {
 
-	postId := r.PathValue("postId")
-	p := GetPersistence(ctx)
-
-	post, err := p.Get(ctx, postId)
-	if err != nil {
-		log.Println("p.Get:", err)
-		return nil, ErrorPersistenceRead
-	}
-	if post == nil {
-		return nil, ErrorPostNotFound
-	}
+	post := GetPost(ctx) // get post from context
 
 	// Access control
 	if post.Item.Author.ID != auth.GetAuth(ctx).User.ID {
 		return nil, ErrorPostForbidden
 	}
 
+	// Update fields
 	post.Item.Author = auth.GetAuth(ctx).User // Update user data
 	post.Item.ModificationTime = time.Now()
 
@@ -44,12 +34,14 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 		post.Item.Body = *input.Body
 	}
 
-	err = post.Item.Validate()
+	// Validate post
+	err := post.Item.Validate()
 	if err != nil {
 		return nil, err
 	}
 
-	err = p.Put(ctx, post)
+	// Save changes
+	err = GetPersistence(ctx).Put(ctx, post)
 	if err != nil {
 		log.Println("p.Put:", err)
 		return nil, ErrorPersistenceWrite
