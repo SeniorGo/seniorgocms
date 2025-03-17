@@ -33,7 +33,7 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 		return nil, err
 	}
 
-	p := GetPersistence(ctx)
+	p := GetPostPersistence(ctx)
 	err = p.Put(context.Background(), &persistence.ItemWithId[Post]{
 		Id:   post.Id,
 		Item: post,

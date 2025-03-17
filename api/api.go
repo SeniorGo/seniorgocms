@@ -11,7 +11,11 @@ import (
 	"github.com/SeniorGo/seniorgocms/statics"
 )
 
-func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.Handler {
+func NewApi(
+	version, staticsDir string,
+	postPersistencer persistence.Persistencer[Post],
+	categoryPersistencer persistence.Persistencer[Category],
+) http.Handler {
 
 	b := box.NewBox()
 
@@ -22,7 +26,8 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 
 	b.WithInterceptors(func(next box.H) box.H {
 		return func(ctx context.Context) {
-			ctx = context.WithValue(ctx, "persistence", p)
+			ctx = context.WithValue(ctx, "post-persistence", postPersistencer)
+			ctx = context.WithValue(ctx, "category-persistence", categoryPersistencer)
 			next(ctx)
 		}
 	})
@@ -44,6 +49,7 @@ func NewApi(version, staticsDir string, p persistence.Persistencer[Post]) http.H
 	v0.Handle("GET", "/posts/{postId}", HandleGetPost)
 	v0.Handle("PATCH", "/posts/{postId}", HandleModifyPost)
 	v0.Handle("DELETE", "/posts/{postId}", HandleDeletePost)
+	v0.Handle("POST", "/categories", HandleCreateCategory)
 
 	// openapi
 	buildOpenApi(b)

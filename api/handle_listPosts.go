@@ -10,7 +10,7 @@ func HandleListPosts(w http.ResponseWriter, r *http.Request) ([]Post, error) {
 
 	ctx := r.Context()
 
-	p := GetPersistence(ctx)
+	p := GetPostPersistence(ctx)
 
 	posts, err := p.List(ctx)
 	if err != nil {
