@@ -47,14 +47,20 @@ func main() {
 		log.Println("Error sending notification:", err.Error())
 	}
 
-	p, err := persistence.NewInDisk[api.Post](c.DataDir)
+	postPersistencer, err := persistence.NewInDisk[api.Post](c.DataDir + "/posts")
+	if err != nil {
+		log.Println("Error creating persistence file:", err.Error())
+		return
+	}
+
+	categoryPersistencer, err := persistence.NewInDisk[api.Category](c.DataDir + "/categories")
 	if err != nil {
 		log.Println("Error creating persistence file:", err.Error())
 		return
 	}
 
 	// Instanciamos API y server
-	m := api.NewApi(VERSION, c.StaticsDir, p)
+	m := api.NewApi(VERSION, c.StaticsDir, postPersistencer, categoryPersistencer)
 	s := http.Server{
 		Addr:    c.Addr,
 		Handler: m,

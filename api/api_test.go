@@ -15,8 +15,11 @@ import (
 
 func TestNewApi(t *testing.T) {
 
-	// p := persistence.NewInMemory[Post]()
-	p, err := persistence.NewInDisk[Post](t.TempDir())
+	// postPersistencer := persistence.NewInMemory[Post]()
+	postPersistencer, err := persistence.NewInDisk[Post](t.TempDir())
+	biff.AssertNil(err)
+
+	categoryPersistencer, err := persistence.NewInDisk[Category](t.TempDir())
 	biff.AssertNil(err)
 
 	user := auth.User{
@@ -29,7 +32,7 @@ func TestNewApi(t *testing.T) {
 	authHeaderBytes, _ := json.Marshal(map[string]any{"user": user})
 	authHeader := string(authHeaderBytes)
 
-	h := NewApi("testversion", "", p)
+	h := NewApi("testversion", "", postPersistencer, categoryPersistencer)
 	a := apitest.NewWithHandler(h)
 
 	t.Run("Request /version", func(t *testing.T) {
@@ -39,16 +42,6 @@ func TestNewApi(t *testing.T) {
 
 		biff.AssertEqual(r.StatusCode, http.StatusOK)
 		biff.AssertEqual(r.BodyString(), "testversion")
-	})
-
-	t.Run("Request /hello", func(t *testing.T) {
-		r := a.Request("POST", "/hello").
-			WithHeader(auth.XGlueAuthentication, authHeader).
-			WithBodyJson(map[string]string{"name": "Manu"}).
-			Do()
-
-		biff.AssertEqual(r.StatusCode, http.StatusOK)
-		biff.AssertEqual(r.BodyJsonMap()["message"], "Hello Manu!")
 	})
 
 	t.Run("List posts (empty)", func(t *testing.T) {
@@ -111,6 +104,26 @@ func TestNewApi(t *testing.T) {
 			},
 		}
 		biff.AssertEqual(r.BodyJsonMap(), expectedBody)
+	})
+
+	t.Run("Create Category", func(t *testing.T) {
+		r := a.Request("POST", "/v0/categories").
+			WithHeader(auth.XGlueAuthentication, authHeader).
+			WithBodyJson(map[string]string{
+				"name": "My Category",
+			}).
+			Do()
+
+		biff.AssertEqual(r.StatusCode, http.StatusCreated)
+
+		body := r.BodyJsonMap()
+		expectedBody := map[string]interface{}{
+			"id":                body["id"],
+			"name":              "My Category",
+			"creation_time":     body["creation_time"],
+			"modification_time": body["modification_time"],
+		}
+		biff.AssertEqualJson(r.BodyJsonMap(), expectedBody)
 	})
 
 }

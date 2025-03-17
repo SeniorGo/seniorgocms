@@ -17,7 +17,7 @@ type ModifyPostRequest struct {
 func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostRequest) (*Post, error) {
 
 	postId := r.PathValue("postId")
-	p := GetPersistence(ctx)
+	p := GetPostPersistence(ctx)
 
 	post, err := p.Get(ctx, postId)
 	if err != nil {

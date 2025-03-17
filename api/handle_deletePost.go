@@ -10,7 +10,7 @@ import (
 
 func HandleDeletePost(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 	postId := r.PathValue("postId")
-	p := GetPersistence(ctx)
+	p := GetPostPersistence(ctx)
 
 	post, err := p.Get(ctx, postId)
 	if err != nil {

@@ -39,7 +39,7 @@ func HandleSitemap(w http.ResponseWriter, ctx context.Context) error {
 		ChangeFreq: "weekly",
 	})
 
-	posts, err := GetPersistence(ctx).List(ctx)
+	posts, err := GetPostPersistence(ctx).List(ctx)
 	if err != nil {
 		return err
 	}
