@@ -40,7 +40,7 @@ Entra en la [comunidad de discord](https://discord.com/channels/1235789126033477
 
 En la comunidad de discord pide acceso para:
 * Escribir en los repositorios de github.com/SeniorGo
-* Leer los logs de inceptiondb.io
+* Leer los logs de https://instantlogs.io
 
 Haz tu primer push a master añadiéndote a la página de contributors.
 
