@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -126,4 +127,13 @@ func TestNewApi(t *testing.T) {
 		biff.AssertEqualJson(r.BodyJsonMap(), expectedBody)
 	})
 
+	t.Run("Get posts HTTP Test", func(t *testing.T) {
+
+		req := httptest.NewRequest("GET", "/v0/posts", nil)
+		rr := httptest.NewRecorder()
+
+		HandleListPosts(rr, req)
+
+		
+	})
 }

@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"time"
 
@@ -10,6 +9,7 @@ import (
 
 	"github.com/SeniorGo/seniorgocms/auth"
 	"github.com/SeniorGo/seniorgocms/persistence"
+	"github.com/SeniorGo/seniorgocms/utils"
 )
 
 type CreatePostRequest struct {
@@ -18,6 +18,9 @@ type CreatePostRequest struct {
 }
 
 func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
+	logger := utils.GlobalLogger
+
+	logger.Info("Creando nuevo post con título: %s", input.Title)
 
 	post := Post{
 		Id:           uuid.NewString(),
@@ -39,10 +42,11 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 		Item: post,
 	})
 	if err != nil {
-		log.Println("p.Put:", err)
+		logger.Error("Error al guardar el post: %v", err)
 		return nil, ErrorPersistenceWrite
 	}
 
+	logger.Success("Post creado exitosamente con ID: %s", post.Id)
 	w.WriteHeader(http.StatusCreated)
 
 	return &post, nil

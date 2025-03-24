@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +9,7 @@ import (
 	"github.com/SeniorGo/seniorgocms/api"
 	"github.com/SeniorGo/seniorgocms/discord"
 	"github.com/SeniorGo/seniorgocms/persistence"
+	"github.com/SeniorGo/seniorgocms/utils"
 )
 
 var VERSION = "dev"
@@ -24,6 +24,9 @@ type Config struct {
 }
 
 func main() {
+	// Initialize global logger
+	utils.InitLogger()
+	logger := utils.GlobalLogger
 
 	// Default config
 	c := &Config{
@@ -37,14 +40,14 @@ func main() {
 	if err == nil {
 		json.NewDecoder(f).Decode(&c)
 	}
-	fmt.Println(c.ServiceName, VERSION)
+	logger.Info("Iniciando %s versión %s", c.ServiceName, VERSION)
 
 	// Notify to discord
 	msg := c.ServiceName + ": Nueva version " + VERSION + "\n" + DESCRIPTION
-	log.Println(msg)
+	logger.Info(msg)
 	err = discord.Notify(c.Discord, msg)
 	if err != nil {
-		log.Println("Error sending notification:", err.Error())
+		logger.Error("Error sending notification: %v", err)
 	}
 
 	postPersistencer, err := persistence.NewInDisk[api.Post](c.DataDir + "/posts")
