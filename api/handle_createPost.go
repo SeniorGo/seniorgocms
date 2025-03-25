@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -19,7 +20,7 @@ type CreatePostRequest struct {
 
 func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
 	logger := utils.GlobalLogger
-
+	slog.Info("Creando nuevo post con título: %s", input.Title)
 	logger.Info("Creando nuevo post con título: %s", input.Title)
 
 	post := Post{
