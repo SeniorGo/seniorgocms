@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"github.com/SeniorGo/seniorgocms/logger"
 	"log/slog"
 	"net/http"
 	"os"
@@ -26,8 +26,9 @@ type Config struct {
 }
 
 type ConfigLog struct {
-	Type  string `json:"type"`
-	Level string `json:"level"` // TODO: hacer luego
+	Type   string `json:"type"`
+	Colors bool   `json:"colors"`
+	Level  string `json:"level"` // TODO: hacer luego
 }
 
 func main() {
@@ -50,10 +51,18 @@ func main() {
 	fmt.Println(c.ServiceName, VERSION)
 
 	var logHandler slog.Handler
+	options := &slog.HandlerOptions{
+		AddSource: true,
+		//Level:       nil,
+		ReplaceAttr: nil,
+	}
 	if c.Log.Type == "text" {
-		logHandler = slog.NewTextHandler(os.Stdout, nil)
+		logHandler = slog.NewTextHandler(os.Stdout, options)
 	} else {
-		logHandler = slog.NewJSONHandler(os.Stdout, nil)
+		logHandler = slog.NewJSONHandler(os.Stdout, options)
+	}
+	if c.Log.Colors {
+		logHandler = logger.NewColorsHandler(logHandler)
 	}
 	l := slog.New(logHandler).With("version", VERSION)
 
@@ -62,18 +71,18 @@ func main() {
 	l.Info(msg)
 	err = discord.Notify(c.Discord, msg)
 	if err != nil {
-		log.Println("Error sending notification:", err.Error())
+		l.Error("Error sending notification: " + err.Error())
 	}
 
 	postPersistencer, err := persistence.NewInDisk[api.Post](c.DataDir + "/posts")
 	if err != nil {
-		log.Println("Error creating persistence file:", err.Error())
+		l.Error("Error creating persistence file: " + err.Error())
 		return
 	}
 
 	categoryPersistencer, err := persistence.NewInDisk[api.Category](c.DataDir + "/categories")
 	if err != nil {
-		log.Println("Error creating persistence file:", err.Error())
+		l.Error("Error creating persistence file: " + err.Error())
 		return
 	}
 
@@ -85,9 +94,10 @@ func main() {
 	}
 
 	// Start server
-	log.Println("Listening on", s.Addr)
+	l.Info("Listening on " + s.Addr)
 	err = s.ListenAndServe() // this call is blocking
 	if err != nil {
-		log.Fatal(err)
+		l.Error(err.Error())
+		os.Exit(1)
 	}
 }
