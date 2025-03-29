@@ -2,6 +2,8 @@ package api
 
 import (
 	"encoding/json"
+	"io"
+	"log/slog"
 	"net/http"
 	"strings"
 	"testing"
@@ -32,7 +34,10 @@ func TestNewApi(t *testing.T) {
 	authHeaderBytes, _ := json.Marshal(map[string]any{"user": user})
 	authHeader := string(authHeaderBytes)
 
-	h := NewApi("testversion", "", postPersistencer, categoryPersistencer)
+	// Crear logger para testing
+	logger := slog.New(slog.NewTextHandler(io.Discard, &slog.HandlerOptions{}))
+
+	h := NewApi("testversion", "", postPersistencer, categoryPersistencer, logger)
 	a := apitest.NewWithHandler(h)
 
 	t.Run("Request /version", func(t *testing.T) {
