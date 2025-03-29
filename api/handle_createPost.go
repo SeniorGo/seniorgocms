@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/SeniorGo/seniorgocms/logger"
-	"log"
 	"net/http"
 	"time"
 
@@ -21,7 +20,6 @@ type CreatePostRequest struct {
 func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
 
 	l := logger.GetLog(ctx)
-	l.Info("Creando un post nuevo", "tittle", input.Title)
 
 	post := Post{
 		Id:           uuid.NewString(),
@@ -32,8 +30,11 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 	}
 	post.ModificationTime = post.CreationTime
 
+	l.Info("Creando un post nuevo", "title", input.Title, "id", post.Id)
+
 	err := post.Validate()
 	if err != nil {
+		l.Warn("El post no es válido: " + err.Error())
 		return nil, err
 	}
 
@@ -43,11 +44,13 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 		Item: post,
 	})
 	if err != nil {
-		log.Println("p.Put:", err)
+		l.Error("p.Put: " + err.Error())
 		return nil, ErrorPersistenceWrite
 	}
 
 	w.WriteHeader(http.StatusCreated)
+
+	l.Info("Post creado correctamente")
 
 	return &post, nil
 }
