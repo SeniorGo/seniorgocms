@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/SeniorGo/seniorgocms/logger"
 	"log/slog"
 	"net/http"
 	"os"
+
+	"github.com/SeniorGo/seniorgocms/logger"
 
 	"github.com/SeniorGo/seniorgocms/api"
 	"github.com/SeniorGo/seniorgocms/discord"
@@ -22,13 +23,7 @@ type Config struct {
 	StaticsDir  string                `json:"statics_dir"`
 	DataDir     string                `json:"data_dir"`
 	Discord     discord.DiscordConfig `json:"discord"`
-	Log         ConfigLog             `json:"log"`
-}
-
-type ConfigLog struct {
-	Type   string `json:"type"`
-	Colors bool   `json:"colors"`
-	Level  string `json:"level"` // TODO: hacer luego
+	Log         logger.ConfigLog      `json:"log"`
 }
 
 func main() {
@@ -38,8 +33,9 @@ func main() {
 		Addr:        ":8080",
 		ServiceName: "SeniorGo - Latam",
 		DataDir:     "./data",
-		Log: ConfigLog{
-			Type: "json",
+		Log: logger.ConfigLog{
+			Type:  "json",
+			Level: "info",
 		},
 	}
 
@@ -52,8 +48,8 @@ func main() {
 
 	var logHandler slog.Handler
 	options := &slog.HandlerOptions{
-		AddSource: true,
-		//Level:       nil,
+		AddSource:   true,
+		Level:       logger.ParseLevel(c.Log.Level),
 		ReplaceAttr: nil,
 	}
 	if c.Log.Type == "text" {
