@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -21,6 +22,12 @@ type Config struct {
 	StaticsDir  string                `json:"statics_dir"`
 	DataDir     string                `json:"data_dir"`
 	Discord     discord.DiscordConfig `json:"discord"`
+	Log         ConfigLog             `json:"log"`
+}
+
+type ConfigLog struct {
+	Type  string `json:"type"`
+	Level string `json:"level"` // TODO: hacer luego
 }
 
 func main() {
@@ -30,6 +37,9 @@ func main() {
 		Addr:        ":8080",
 		ServiceName: "SeniorGo - Latam",
 		DataDir:     "./data",
+		Log: ConfigLog{
+			Type: "json",
+		},
 	}
 
 	// Read config
@@ -39,9 +49,17 @@ func main() {
 	}
 	fmt.Println(c.ServiceName, VERSION)
 
+	var logHandler slog.Handler
+	if c.Log.Type == "text" {
+		logHandler = slog.NewTextHandler(os.Stdout, nil)
+	} else {
+		logHandler = slog.NewJSONHandler(os.Stdout, nil)
+	}
+	l := slog.New(logHandler).With("version", VERSION)
+
 	// Notify to discord
 	msg := c.ServiceName + ": Nueva version " + VERSION + "\n" + DESCRIPTION
-	log.Println(msg)
+	l.Info(msg)
 	err = discord.Notify(c.Discord, msg)
 	if err != nil {
 		log.Println("Error sending notification:", err.Error())
@@ -60,7 +78,7 @@ func main() {
 	}
 
 	// Instanciamos API y server
-	m := api.NewApi(VERSION, c.StaticsDir, postPersistencer, categoryPersistencer)
+	m := api.NewApi(VERSION, c.StaticsDir, postPersistencer, categoryPersistencer, l)
 	s := http.Server{
 		Addr:    c.Addr,
 		Handler: m,

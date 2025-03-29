@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"github.com/SeniorGo/seniorgocms/logger"
+	"log/slog"
 	"net/http"
 
 	"github.com/fulldump/box"
@@ -15,11 +17,13 @@ func NewApi(
 	version, staticsDir string,
 	postPersistencer persistence.Persistencer[Post],
 	categoryPersistencer persistence.Persistencer[Category],
+	log *slog.Logger,
 ) http.Handler {
 
 	b := box.NewBox()
 
 	b.WithInterceptors(
+		logger.InjectLog(log),
 		InterceptorAccessLog,
 		PrettyError,
 	)

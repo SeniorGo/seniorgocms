@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"github.com/SeniorGo/seniorgocms/logger"
 	"net/http"
 	"strings"
 
@@ -45,6 +46,8 @@ func PrettyError(next box.H) box.H {
 					"error": httpErr,
 				})
 			}
+
+			logger.GetLog(ctx).Error(httpErr.Title, "description", httpErr.Description)
 		}
 	}
 }

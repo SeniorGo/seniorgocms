@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"github.com/SeniorGo/seniorgocms/logger"
 	"log"
 	"net/http"
 	"time"
@@ -18,6 +19,9 @@ type CreatePostRequest struct {
 }
 
 func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
+
+	l := logger.GetLog(ctx)
+	l.Info("Creando un post nuevo", "tittle", input.Title)
 
 	post := Post{
 		Id:           uuid.NewString(),

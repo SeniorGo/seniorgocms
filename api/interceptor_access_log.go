@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-	"log"
+	"github.com/SeniorGo/seniorgocms/logger"
 	"net"
 
 	"github.com/fulldump/box"
@@ -19,7 +19,11 @@ func InterceptorAccessLog(next box.H) box.H {
 		if boxAction := box.GetBoxContext(ctx).Action; boxAction != nil {
 			action = boxAction.Name
 		}
-		log.Println(ip, r.Method, r.URL.String(), action)
+		logger.GetLog(ctx).Info("Access",
+			"ip", ip,
+			"method", r.Method,
+			"url", r.URL.String(),
+			"action", action)
 		next(ctx)
 	}
 }

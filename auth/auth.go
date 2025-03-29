@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/SeniorGo/seniorgocms/logger"
 
 	"github.com/fulldump/box"
 )
@@ -46,6 +47,9 @@ func Require(next box.H) box.H {
 		}
 
 		ctx = SetAuth(ctx, a)
+
+		l := logger.GetLog(ctx).With("user_id", a.User.ID)
+		ctx = logger.SetLog(ctx, l)
 
 		next(ctx)
 	}
