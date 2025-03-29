@@ -3,6 +3,7 @@ package logger
 import (
 	"context"
 	"github.com/fulldump/box"
+	"github.com/google/uuid"
 	"log/slog"
 )
 
@@ -13,7 +14,20 @@ func GetLog(ctx context.Context) *slog.Logger {
 func InjectLog(log *slog.Logger) box.I {
 	return func(next box.H) box.H {
 		return func(ctx context.Context) {
-			ctx = SetLog(ctx, log)
+
+			r := box.GetRequest(ctx)
+
+			traceparent := r.Header.Get("Traceparent")
+			if traceparent == "" {
+				traceparent = uuid.NewString()
+			}
+
+			l := log.With("traceparent", traceparent)
+			ctx = SetLog(ctx, l)
+
+			w := box.GetResponse(ctx)
+			w.Header().Set("Traceparent", traceparent)
+
 			next(ctx)
 		}
 	}
