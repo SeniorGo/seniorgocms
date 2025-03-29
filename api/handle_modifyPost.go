@@ -2,7 +2,7 @@ package api
 
 import (
 	"context"
-	"log"
+	"github.com/SeniorGo/seniorgocms/logger"
 	"net/http"
 	"time"
 
@@ -16,12 +16,16 @@ type ModifyPostRequest struct {
 
 func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostRequest) (*Post, error) {
 
+	l := logger.GetLog(ctx)
+
 	postId := r.PathValue("postId")
 	p := GetPostPersistence(ctx)
 
+	l.Info("Modificando el post", "title", input.Title, "postId", postId)
+
 	post, err := p.Get(ctx, postId)
 	if err != nil {
-		log.Println("p.Get:", err)
+		l.Error("p.Get:", err)
 		return nil, ErrorPersistenceRead
 	}
 	if post == nil {
@@ -51,9 +55,11 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 
 	err = p.Put(ctx, post)
 	if err != nil {
-		log.Println("p.Put:", err)
+		l.Error("p.Put:", err)
 		return nil, ErrorPersistenceWrite
 	}
+
+	l.Info("Post modificado correctamente")
 
 	return &post.Item, nil
 }
