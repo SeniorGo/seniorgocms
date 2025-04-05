@@ -78,24 +78,31 @@
             </div>
           </div>
 
-          <div class="mb-4">
-            <a href="/admin/posts/editor" class="btn btn-primary"
-              >Crear nuevo post</a
-            >
-          </div>
-
           <div class="overflow-x-auto">
-            <table class="table w-full">
+            <div class="flex justify-between items-center mb-4">
+              <div class="flex gap-2">
+                <a href="/admin/posts/editor" class="btn btn-primary">Nuevo Post</a>
+                <input
+                  type="text"
+                  id="tag-filter"
+                  placeholder="Filtrar por etiqueta..."
+                  class="input input-bordered"
+                />
+              </div>
+            </div>
+            <table class="table">
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Título</th>
+                  <th>Etiquetas</th>
                   <th>Fecha de creación</th>
                   <th>Fecha de modificación</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
-              <tbody id="posts-tbody"></tbody>
+              <tbody id="posts-tbody">
+              </tbody>
             </table>
           </div>
         </section>

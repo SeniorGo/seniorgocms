@@ -4,8 +4,10 @@ const postsTableBody = document.getElementById("posts-tbody");
 const confirmDialog = document.getElementById("confirm-dialog");
 const deleteBtnOfDialog = document.getElementById("delete-btn-dialog");
 const cancelBtnOfDialog = document.getElementById("cancel-btn-dialog");
+const tagFilterInput = document.getElementById("tag-filter");
 
 let selectedPostToDelete = null;
+let allPosts = [];
 
 const fakeHeaders = {
   "X-Glue-Authentication": JSON.stringify({
@@ -28,6 +30,10 @@ function addPost(post) {
 
   td = document.createElement("td");
   td.textContent = post.title;
+  tr.appendChild(td);
+
+  td = document.createElement("td");
+  td.textContent = post.tags ? post.tags.join(", ") : "";
   tr.appendChild(td);
 
   td = document.createElement("td");
@@ -60,6 +66,17 @@ function addPost(post) {
   return tr;
 }
 
+function filterPosts() {
+  const tagFilter = tagFilterInput.value.toLowerCase().trim();
+  postsTableBody.innerHTML = "";
+  
+  allPosts.forEach(post => {
+    if (!tagFilter || (post.tags && post.tags.some(tag => tag.toLowerCase().includes(tagFilter)))) {
+      addPost(post);
+    }
+  });
+}
+
 async function deletePost(id) {
   try {
     const response = await postService.deletePost({ id });
@@ -77,12 +94,8 @@ async function deletePost(id) {
 
 async function loadPosts() {
   try {
-    postsTableBody.textContent = "";
-
-    const posts = await postService.listPosts();
-    for (const post of posts) {
-      addPost(post);
-    }
+    allPosts = await postService.listPosts();
+    filterPosts();
   } catch (error) {
     console.error("Error loading posts:", error);
   }
@@ -98,5 +111,7 @@ deleteBtnOfDialog.addEventListener("click", async () => {
 cancelBtnOfDialog.addEventListener("click", () => {
   selectedPostToDelete = null;
 });
+
+tagFilterInput.addEventListener("input", filterPosts);
 
 loadPosts();

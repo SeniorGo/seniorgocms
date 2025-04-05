@@ -13,8 +13,9 @@ import (
 )
 
 type CreatePostRequest struct {
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	Title string   `json:"title"`
+	Body  string   `json:"body"`
+	Tags  []string `json:"tags"`
 }
 
 func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx context.Context) (*Post, error) {
@@ -26,6 +27,7 @@ func HandleCreatePost(input *CreatePostRequest, w http.ResponseWriter, ctx conte
 		Author:       auth.GetAuth(ctx).User,
 		Title:        input.Title,
 		Body:         input.Body,
+		Tags:         input.Tags,
 		CreationTime: time.Now(),
 	}
 	post.ModificationTime = post.CreationTime

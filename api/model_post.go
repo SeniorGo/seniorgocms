@@ -12,8 +12,9 @@ type Post struct {
 
 	Author auth.User `json:"author"`
 
-	Title string `json:"title"`
-	Body  string `json:"body"`
+	Title string   `json:"title"`
+	Body  string   `json:"body"`
+	Tags  []string `json:"tags"`
 
 	CreationTime     time.Time `json:"creation_time"`
 	ModificationTime time.Time `json:"modification_time"`
@@ -32,6 +33,15 @@ func (e *Post) Validate() error {
 		return HttpError{
 			Status:      http.StatusBadRequest,
 			Description: "body too long",
+		}
+	}
+
+	for _, tag := range e.Tags {
+		if len(tag) > 128 {
+			return HttpError{
+				Status:      http.StatusBadRequest,
+				Description: "tag is too long (max 128 characters)",
+			}
 		}
 	}
 

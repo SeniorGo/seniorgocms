@@ -19,7 +19,7 @@ func HandleDeletePost(ctx context.Context, w http.ResponseWriter, r *http.Reques
 
 	post, err := p.Get(ctx, postId)
 	if err != nil {
-		l.Error("p.Get", err)
+		l.Error("Error getting post", "error", err.Error())
 		return ErrorPersistenceRead
 	}
 	if post == nil {
@@ -33,7 +33,7 @@ func HandleDeletePost(ctx context.Context, w http.ResponseWriter, r *http.Reques
 
 	err = p.Delete(ctx, postId)
 	if err != nil {
-		l.Error("p.Delete:", err)
+		l.Error("Error deleting post", "error", err.Error())
 		return ErrorPersistenceWrite
 	}
 

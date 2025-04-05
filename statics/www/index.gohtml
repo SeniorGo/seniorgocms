@@ -77,8 +77,16 @@
 
     <!-- Posts -->
     <div class="container mx-auto mt-10 px-4 lg:px-0">
+      {{ if .TagFilter }}
+      <div class="flex items-center justify-center mb-6">
+        <div class="badge badge-lg">
+          Filtrando por: {{ .TagFilter }}
+          <a href="/" class="ml-2 hover:text-error">✕</a>
+        </div>
+      </div>
+      {{ end }}
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {{ range . }}
+        {{ range .Posts }}
         <div class="card bg-base-100 shadow-xl">
           <!-- use with post image 
           <figure>
@@ -96,7 +104,16 @@
             </div>
             -->
             <h2 class="card-title mt-2">{{ .Title }}</h2>
-            <p class="text-gray-600 text-ellipsis" style="word-wrap: break-word; max-height: 3.5em; overflow: hidden;">
+            {{ if .Tags }}
+            <div class="flex flex-wrap gap-2 mt-2">
+              {{ range .Tags }}
+              <a href="/?tag={{ . }}" class="no-underline">
+                <span class="badge badge-outline hover:bg-base-200">{{ . }}</span>
+              </a>
+              {{ end }}
+            </div>
+            {{ end }}
+            <p class="text-gray-600 text-ellipsis mt-2" style="word-wrap: break-word; max-height: 3.5em; overflow: hidden;">
               {{ if .Author.Nick }}<small>By {{ .Author.Nick }}</small>{{end}}
               {{ .Body }}
             </p>
@@ -106,7 +123,14 @@
           </div>
         </div>
         {{ else }}
-        <p>No hay posts aún.</p>
+        <div class="col-span-3 text-center py-8">
+          {{ if .TagFilter }}
+          <p>No hay posts con la etiqueta "{{ .TagFilter }}"</p>
+          <a href="/" class="btn btn-primary mt-4">Ver todos los posts</a>
+          {{ else }}
+          <p>No hay posts aún.</p>
+          {{ end }}
+        </div>
         {{ end }}
       </div>
     </div>

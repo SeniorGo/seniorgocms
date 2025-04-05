@@ -52,9 +52,13 @@
       <div class="hero-content text-center">
         <div class="max-w-2xl">
           <h1 class="text-4xl font-bold mb-2">{{ .Title }}</h1>
-          <!-- <p class="text-gray-600">
-            Categoría: <span class="badge badge-outline">Diseño</span>
-          </p>-->
+          {{ if .Tags }}
+          <div class="flex flex-wrap gap-2 mb-4">
+            {{ range .Tags }}
+            <span class="badge badge-outline">{{ . }}</span>
+            {{ end }}
+          </div>
+          {{ end }}
           <p class="text-gray-600 mt-2">
             Publicado el {{ .CreationTime | formatDateES }} {{ if .Author.Nick
             }} por

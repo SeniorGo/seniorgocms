@@ -2,9 +2,10 @@ package logger
 
 import (
 	"context"
+	"log/slog"
+
 	"github.com/fulldump/box"
 	"github.com/google/uuid"
-	"log/slog"
 )
 
 func GetLog(ctx context.Context) *slog.Logger {
@@ -22,7 +23,10 @@ func InjectLog(log *slog.Logger) box.I {
 				traceparent = uuid.NewString()
 			}
 
-			l := log.With("traceparent", traceparent)
+			l := log.With(
+				"traceparent", traceparent,
+				"action", box.GetBoxContext(ctx).Action.Name,
+			)
 			ctx = SetLog(ctx, l)
 
 			w := box.GetResponse(ctx)

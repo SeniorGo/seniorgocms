@@ -10,8 +10,9 @@ import (
 )
 
 type ModifyPostRequest struct {
-	Title *string `json:"title"`
-	Body  *string `json:"body"`
+	Title *string   `json:"title"`
+	Body  *string   `json:"body"`
+	Tags  *[]string `json:"tags"`
 }
 
 func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostRequest) (*Post, error) {
@@ -25,7 +26,7 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 
 	post, err := p.Get(ctx, postId)
 	if err != nil {
-		l.Error("p.Get:", err)
+		l.Error("Error getting post", "error", err.Error())
 		return nil, ErrorPersistenceRead
 	}
 	if post == nil {
@@ -48,6 +49,10 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 		post.Item.Body = *input.Body
 	}
 
+	if input.Tags != nil {
+		post.Item.Tags = *input.Tags
+	}
+
 	err = post.Item.Validate()
 	if err != nil {
 		return nil, err
@@ -55,7 +60,7 @@ func HandleModifyPost(ctx context.Context, r *http.Request, input *ModifyPostReq
 
 	err = p.Put(ctx, post)
 	if err != nil {
-		l.Error("p.Put:", err)
+		l.Error("Error updating post", "error", err.Error())
 		return nil, ErrorPersistenceWrite
 	}
 

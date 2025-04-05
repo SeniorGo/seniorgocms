@@ -30,7 +30,30 @@ func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	err = tmpl.Execute(w, posts)
+	// Filter posts by tag if tag parameter is present
+	tagFilter := r.URL.Query().Get("tag")
+	if tagFilter != "" {
+		filteredPosts := make([]Post, 0)
+		for _, post := range posts {
+			for _, tag := range post.Tags {
+				if tag == tagFilter {
+					filteredPosts = append(filteredPosts, post)
+					break
+				}
+			}
+		}
+		posts = filteredPosts
+	}
+
+	data := struct {
+		Posts     []Post
+		TagFilter string
+	}{
+		Posts:     posts,
+		TagFilter: tagFilter,
+	}
+
+	err = tmpl.Execute(w, data)
 	if err != nil {
 		log.Println("template 'home':", err)
 	}
