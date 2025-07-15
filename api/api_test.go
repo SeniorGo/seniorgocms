@@ -207,6 +207,39 @@ func TestNewApi(t *testing.T) {
 		biff.AssertEqual(body["tags"], []interface{}{"updated", "tags"})
 	})
 
+	t.Run("Search Posts By Query", func(t *testing.T) {
+		a.Request("POST", "/v0/posts").
+			WithHeader(auth.XGlueAuthentication, authHeader).
+			WithBodyJson(map[string]any{
+				"title": "Post to search posts",
+				"body":  "This post with any body only for search with query param",
+			}).
+			Do()
+
+		query := "param"
+		r := a.Request("GET", "/v0/search").
+			WithHeader(auth.XGlueAuthentication, authHeader).
+			WithQuery("q", query).
+			Do()
+
+		biff.AssertEqual(r.StatusCode, http.StatusOK)
+
+		posts := r.BodyJson().([]any)
+		biff.AssertTrue(len(posts) > 0)
+
+		found := false
+		for _, p := range posts {
+			postMap := p.(map[string]interface{})
+			title := postMap["title"].(string)
+			body := postMap["body"].(string)
+			if strings.Contains(strings.ToLower(title), query) || strings.Contains(strings.ToLower(body), query) {
+				found = true
+				break
+			}
+		}
+		biff.AssertTrue(found)
+	})
+
 	t.Run("List Posts with Tag Filter", func(t *testing.T) {
 		// Create posts with different tags
 		a.Request("POST", "/v0/posts").
