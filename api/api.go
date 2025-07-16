@@ -54,6 +54,7 @@ func NewApi(
 	v0.Handle("PATCH", "/posts/{postId}", HandleModifyPost)
 	v0.Handle("DELETE", "/posts/{postId}", HandleDeletePost)
 	v0.Handle("POST", "/categories", HandleCreateCategory)
+	v0.Handle("GET", "/search", HandleSearch)
 
 	// openapi
 	buildOpenApi(b)
