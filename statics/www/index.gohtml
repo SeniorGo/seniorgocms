@@ -85,6 +85,17 @@
         </div>
       </div>
       {{ end }}
+      <div class="flex justify-center items-center gap-3 mb-6">
+        <label for="post-limit" class="font-medium">Mostrar</label>
+        <select id="post-limit" class="select select-sm select-primary w-28">
+          <option value="5" {{ if eq .Limit 5 }}selected{{ end }}>5</option>
+          <option value="10" {{ if eq .Limit 10 }}selected{{ end }}>10</option>
+          <option value="20" {{ if eq .Limit 20 }}selected{{ end }}>20</option>
+          <option value="50" {{ if eq .Limit 50 }}selected{{ end }}>50</option>
+          <option value="100" {{ if eq .Limit 100 }}selected{{ end }}>100</option>
+        </select>
+        <span class="text-sm text-gray-500">posts por página</span>
+      </div>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {{ range .Posts }}
         <div class="card bg-base-100 shadow-xl">
@@ -132,6 +143,35 @@
           {{ end }}
         </div>
         {{ end }}
+      </div>
+      <div class="flex justify-center mt-8 space-x-2">
+        {{ $limit := .Limit }}
+        {{ $skip := .Skip }}
+        {{ $total := .TotalPosts }}
+        {{ $totalPages := (add (div (sub $total 1) $limit) 1) }}
+        {{ $currentPage := (div $skip $limit) | add 1 }}
+
+        <!-- Prev -->
+          <a class="btn btn-sm {{ if eq $currentPage 1 }}btn-disabled{{ end }}"
+             href="/?limit={{$limit}}&skip={{mul (sub $currentPage 2) $limit}}">
+            « Prev
+          </a>
+
+        <!-- Pages -->
+        {{ range $i := until $totalPages }}
+          {{ $page := add $i 1 }}
+          <a class="btn btn-sm {{ if eq $page $currentPage }}btn-primary{{ end }}"
+             href="/?limit={{$limit}}&skip={{mul (sub $page 1) $limit}}">
+            {{ $page }}
+          </a>
+        {{ end }}
+
+        <!-- Next -->
+          <a class="btn btn-sm {{ if eq $currentPage $totalPages }}btn-disabled{{ end }}"
+
+             href="/?limit={{$limit}}&skip={{mul $currentPage $limit}}">
+            Next »
+          </a>
       </div>
     </div>
 
