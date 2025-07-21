@@ -6,6 +6,14 @@ const avatarBtn = document.getElementById("auth_avatar");
 const avatarImg = document.getElementById("auth_avatar_image");
 const versionContainer = document.getElementById("version");
 
+document.getElementById("post-limit").addEventListener("change", function() {
+    const limit = this.value;
+    const url = new URL(window.location.href)
+    url.searchParams.set("limit", limit);
+    url.searchParams.set("skip", 0);
+    window.location.href = url.toString();
+
+})
 fetch("/version")
   .then((req) => req.text())
   .then((version) => {

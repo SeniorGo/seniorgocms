@@ -4,9 +4,17 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"strconv"
 )
 
-func HandleListPosts(w http.ResponseWriter, r *http.Request) ([]Post, error) {
+type PaginatedPosts struct {
+	Total int    `json:"total"`
+	Limit int    `json:"limit"`
+	Skip  int    `json:"skip"`
+	Posts []Post `json:"posts"`
+}
+
+func HandleListPosts(w http.ResponseWriter, r *http.Request) (PaginatedPosts, error) {
 
 	ctx := r.Context()
 
@@ -15,7 +23,7 @@ func HandleListPosts(w http.ResponseWriter, r *http.Request) ([]Post, error) {
 	posts, err := p.List(ctx)
 	if err != nil {
 		log.Println("p.List:", err)
-		return nil, ErrorPersistenceRead
+		return PaginatedPosts{}, ErrorPersistenceRead
 	}
 
 	result := make([]Post, len(posts))
@@ -27,5 +35,36 @@ func HandleListPosts(w http.ResponseWriter, r *http.Request) ([]Post, error) {
 		return result[i].CreationTime.After(result[j].CreationTime)
 	})
 
-	return result, nil
+	queryParams := r.URL.Query()
+	limitStr := queryParams.Get("limit")
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil || limit <= 0 {
+		limit = 10
+	}
+	skipStr := queryParams.Get("skip")
+	skip, err := strconv.Atoi(skipStr)
+	if err != nil || skip < 0 {
+		skip = 0
+	}
+
+	total := len(result)
+
+	start := skip
+	if start > len(result) {
+		start = len(result)
+	}
+
+	end := start + limit
+	if end > len(result) {
+		end = len(result)
+	}
+
+	result = result[start:end]
+
+	return PaginatedPosts{
+		Total: total,
+		Limit: limit,
+		Skip:  skip,
+		Posts: result,
+	}, nil
 }

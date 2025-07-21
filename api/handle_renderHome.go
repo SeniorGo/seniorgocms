@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/SeniorGo/seniorgocms/statics"
+	"strconv"
 )
 
 func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
@@ -16,7 +17,28 @@ func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
 		log.Println(err)
 	}
 
-	tmpl, err := template.New("home").Parse(string(b))
+	tmpl, err := template.New("home").Funcs(template.FuncMap{
+		"toInt": func(s string) int {
+			i, _ := strconv.Atoi(s)
+			return i
+		},
+		"add": func(a, b int) int { return a + b },
+		"sub": func(a, b int) int { return a - b },
+		"mul": func(a, b int) int { return a * b },
+		"div": func(a, b int) int {
+			if b == 0 {
+				return 0
+			}
+			return a / b
+		},
+		"until": func(n int) []int {
+			arr := make([]int, n)
+			for i := 0; i < n; i++ {
+				arr[i] = i
+			}
+			return arr
+		},
+	}).Parse(string(b))
 	if err != nil {
 		log.Println("template 'home':", err)
 		return HttpError{
@@ -25,11 +47,12 @@ func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 
-	posts, err := HandleListPosts(w, r)
+	paginatedPosts, err := HandleListPosts(w, r)
 	if err != nil {
 		return err
 	}
 
+	posts := paginatedPosts.Posts
 	// Filter posts by tag if tag parameter is present
 	tagFilter := r.URL.Query().Get("tag")
 	if tagFilter != "" {
@@ -46,11 +69,17 @@ func HandleRenderHome(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	data := struct {
-		Posts     []Post
-		TagFilter string
+		Posts      []Post
+		TotalPosts int
+		Limit      int
+		Skip       int
+		TagFilter  string
 	}{
-		Posts:     posts,
-		TagFilter: tagFilter,
+		Posts:      posts,
+		TotalPosts: paginatedPosts.Total,
+		Limit:      paginatedPosts.Limit,
+		Skip:       paginatedPosts.Skip,
+		TagFilter:  tagFilter,
 	}
 
 	err = tmpl.Execute(w, data)
