@@ -9,6 +9,10 @@
       rel="stylesheet"
       type="text/css"
     />
+    <link rel="stylesheet" href="../../../lib/easymde/easymde.min.css">
+
+
+    <script src="../../../lib/easymde/easymde.min.js"></script>
     <script src="../../../lib/daisyui5/browser@4.js"></script>
   </head>
   <body class="bg-base-100">
@@ -81,16 +85,24 @@
               />
             </div>
             <div class="form-control w-full mt-4">
-              <label class="label" for="post-body">
+<!--              <label class="label" for="post-body">-->
+<!--                <span class="label-text">Cuerpo</span>-->
+<!--              </label>-->
+<!--              <textarea-->
+<!--                id="post-body"-->
+<!--                name="post-body"-->
+<!--                placeholder="Escribe el contenido del post"-->
+<!--                class="textarea textarea-bordered w-full"-->
+<!--                rows="20"-->
+<!--                required-->
+<!--              ></textarea>-->
+              <label class="label" for="markdown-editor">
                 <span class="label-text">Cuerpo</span>
               </label>
               <textarea
-                id="post-body"
-                name="post-body"
-                placeholder="Escribe el contenido del post"
-                class="textarea textarea-bordered w-full"
-                rows="20"
-                required
+                      id="markdown-editor"
+                      name="post-body"
+                      placeholder="Escribe el contenido del post"
               ></textarea>
             </div>
             <div class="form-control w-full mt-4">
