@@ -2,11 +2,12 @@ import { PostService } from "../../js/post-service.js";
 
 const postForm = document.getElementById("post-form");
 const postTitleInput = document.getElementById("post-title");
-const postBodyInput = document.getElementById("post-body");
 const postTagsInput = document.getElementById("post-tags");
 const editorBtn = document.getElementById("editor-btn");
 
 let currentPostId = null;
+
+let easyMDE = null
 
 const fakeHeaders = {
   "X-Glue-Authentication": JSON.stringify({
@@ -27,9 +28,14 @@ function parseTags(tagsString) {
 postForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  if (!easyMDE.value().trim()) {
+    alert("El contenido del post no puede estar vacío");
+    return;
+  }
+
   const postRequest = {
     title: postTitleInput.value,
-    body: postBodyInput.value,
+    body: easyMDE.value(),
     tags: parseTags(postTagsInput.value),
   };
 
@@ -44,6 +50,7 @@ postForm.addEventListener("submit", async (e) => {
   location.href = "/admin/posts";
 });
 
+
 document.addEventListener("DOMContentLoaded", async (event) => {
   const searchParams = new URLSearchParams(window.location.search);
   if (searchParams.has("id")) {
@@ -51,7 +58,18 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
     const post = await postService.getPost({ id: currentPostId });
     postTitleInput.value = post.title;
-    postBodyInput.value = post.body;
     postTagsInput.value = post.tags ? post.tags.join(", ") : "";
+
+    document.getElementById("markdown-editor").value = post.body
+  }
+
+  easyMDE = new EasyMDE({
+    element: document.getElementById("markdown-editor"),
+    spellChecker: false,
+    placeholder: "Escribe aquí con Markdown...",
+  });
+
+  if (currentPostId !== null) {
+    easyMDE.value(document.getElementById("markdown-editor").value);
   }
 });
