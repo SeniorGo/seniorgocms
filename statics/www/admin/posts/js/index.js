@@ -1,5 +1,6 @@
 import { PostService } from "./post-service.js";
 
+const postLimitSelect = document.getElementById('post-limit');
 const postsTableBody = document.getElementById("posts-tbody");
 const confirmDialog = document.getElementById("confirm-dialog");
 const deleteBtnOfDialog = document.getElementById("delete-btn-dialog");
@@ -8,6 +9,8 @@ const tagFilterInput = document.getElementById("tag-filter");
 
 let selectedPostToDelete = null;
 let allPosts = [];
+let skip = 0;
+
 
 const fakeHeaders = {
   "X-Glue-Authentication": JSON.stringify({
@@ -21,7 +24,6 @@ const fakeHeaders = {
 const postService = new PostService("/v0/posts", fakeHeaders);
 
 function addPost(post) {
-  console.log(post);
 
   const tr = document.createElement("tr");
   let td = document.createElement("td");
@@ -92,13 +94,61 @@ async function deletePost(id) {
   }
 }
 
+function getCurrentLimit() {
+  return postLimitSelect.value;
+}
+
 async function loadPosts() {
   try {
-    allPosts = await postService.listPosts();
+    let limit = Number(getCurrentLimit()) || 10;
+    const response = await postService.listPosts({limit, skip});
+
+    allPosts = response.posts
+
     filterPosts();
+    renderPagination(response.total);
   } catch (error) {
     console.error("Error loading posts:", error);
   }
+}
+
+function renderPagination(total){
+  const totalPages = Math.ceil(total / Number(getCurrentLimit()))
+  const currentPage = Math.ceil(skip / Number(getCurrentLimit())) + 1
+
+  const pagesContainer = document.getElementById("pagination-pages");
+  pagesContainer.innerHTML = ""
+
+  //Prev
+  document.getElementById("prev-btn").disabled = currentPage === 1;
+  document.getElementById("prev-btn").onclick = () => {
+    if (currentPage > 1) {
+      skip = Math.max(0, skip - Number(getCurrentLimit()));
+
+      loadPosts();
+    }
+  };
+
+  // Pages
+  for (let page = 1; page <= totalPages; page++) {
+    const btn = document.createElement("button");
+    btn.textContent = page;
+    btn.className = `btn btn-sm ${page === currentPage ? "btn-primary" : ""}`;
+    btn.addEventListener("click", () => {
+      skip = (page - 1) * Number(getCurrentLimit());
+      loadPosts();
+    });
+    pagesContainer.appendChild(btn);
+  }
+
+  // Next
+  document.getElementById("next-btn").disabled = currentPage === totalPages;
+  document.getElementById("next-btn").onclick = () => {
+    if (currentPage < totalPages) {
+      skip += Number(getCurrentLimit());
+      loadPosts();
+    }
+  };
 }
 
 deleteBtnOfDialog.addEventListener("click", async () => {
@@ -114,4 +164,10 @@ cancelBtnOfDialog.addEventListener("click", () => {
 
 tagFilterInput.addEventListener("input", filterPosts);
 
+
 loadPosts();
+
+postLimitSelect.addEventListener('change', () => {
+  skip = 0; // Reinicia la paginación
+  loadPosts();
+});

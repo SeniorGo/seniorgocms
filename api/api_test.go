@@ -58,7 +58,13 @@ func TestNewApi(t *testing.T) {
 
 		biff.AssertEqual(r.StatusCode, http.StatusOK)
 
-		expectedBody := []map[string]interface{}{}
+		//expectedBody := []map[string]interface{}{}
+		expectedBody := map[string]interface{}{
+			"total": 0,
+			"posts": []map[string]interface{}{},
+			"limit": 10,
+			"skip":  0,
+		}
 		biff.AssertEqualJson(r.BodyJson(), expectedBody)
 	})
 
@@ -91,8 +97,10 @@ func TestNewApi(t *testing.T) {
 			WithHeader(auth.XGlueAuthentication, authHeader).
 			Do()
 
+		posts := r.BodyJson().(map[string]interface{})["posts"].([]interface{})
+
 		biff.AssertEqual(r.StatusCode, http.StatusOK)
-		biff.AssertEqual(len(r.BodyJson().([]any)), 1)
+		biff.AssertEqual(len(posts), 1)
 	})
 
 	t.Run("Create Post - Error title validation", func(t *testing.T) {
