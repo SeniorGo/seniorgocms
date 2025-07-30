@@ -6,3 +6,5 @@ github.com/fulldump/box v0.5.1 h1:TX3+Sh9Y/sGg8ynAExZF/aGApDyrd01BOgU3mLz82m0=
 github.com/fulldump/box v0.5.1/go.mod h1:k1dcwIeNOar6zLlP9D8oF/4FjQeK8kAt7BtRUh/SrMg=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/yuin/goldmark v1.7.13 h1:GPddIs617DnBLFFVJFgpo1aBfe/4xcvMc3SB5t/D0pA=
+github.com/yuin/goldmark v1.7.13/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=

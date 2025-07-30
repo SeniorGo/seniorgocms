@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/SeniorGo/seniorgocms/utils"
 	"html/template"
 	"log"
 	"net/http"
@@ -15,7 +16,8 @@ func HandleRenderPost(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	tmpl, err := template.New("post").Funcs(template.FuncMap{
-		"formatDateES": formatDateES,
+		"formatDateES":          formatDateES,
+		"convertMarkdownToHTML": utils.ConvertMarkdownToHTML,
 	}).Parse(string(b))
 	if err != nil {
 		log.Println("template 'post':", err)
