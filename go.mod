@@ -8,3 +8,5 @@ require (
 	github.com/fulldump/box v0.5.1
 	github.com/google/uuid v1.6.0
 )
+
+require github.com/yuin/goldmark v1.7.13
