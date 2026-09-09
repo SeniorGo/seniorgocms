@@ -89,6 +89,19 @@
                   class="input input-bordered"
                 />
               </div>
+              <div>
+                <div class="flex justify-center items-center gap-3 mb-6">
+                  <label for="post-limit" class="font-medium">Mostrar</label>
+                  <select id="post-limit" class="select select-sm select-primary w-28">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  <span class="text-sm text-gray-500">posts por página</span>
+                </div>
+              </div>
             </div>
             <table class="table">
               <thead>
@@ -106,6 +119,19 @@
             </table>
           </div>
         </section>
+        <div class="flex justify-center mt-8 space-x-2" id="pagination">
+          <!-- Prev -->
+          <button id="prev-btn" class="btn btn-sm">« Prev</button>
+
+
+          <!-- Pages -->
+          <div id="pagination-pages" class="flex space-x-1"></div>
+
+
+          <!-- Next -->
+          <button id="next-btn" class="btn btn-sm">Next »</button>
+
+        </div>
       </main>
     </div>
 

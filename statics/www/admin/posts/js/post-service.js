@@ -16,8 +16,14 @@ export class PostService {
    * Retrieves all posts.
    * @returns {Promise<Array>} A promise that resolves to an array of posts.
    */
-  async listPosts() {
-    const response = await fetch(this.baseUrl, { headers: this.headers });
+  async listPosts(params = {}) {
+    const url = new URL(this.baseUrl, window.location.origin);
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.append(key, value);
+      }
+    });
+    const response = await fetch(url, { headers: this.headers });
     return await response.json();
   }
 
